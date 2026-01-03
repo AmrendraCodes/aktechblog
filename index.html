@@ -14,7 +14,27 @@
     <link rel="canonical" href="https://aktechblog.vercel.app/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="dns-prefetch" href="//images.unsplash.com" />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <!-- Preload font CSS then apply -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+      />
+    </noscript>
+    <!-- Tiny critical CSS to paint quickly -->
+    <style>
+      html{overflow-x:hidden}
+      body{margin:0;overflow-x:hidden;background:#f3f4f6;color:#111827}
+      #root{min-height:100vh}
+    </style>
 
     <meta property="og:title" content="AK Tech Blog" />
     <meta property="og:description" content="AK Tech Blog - Articles, tutorials, and insights on software and technology." />
