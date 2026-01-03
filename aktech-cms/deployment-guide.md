@@ -56,3 +56,73 @@ Tips:
 - 502 or 504 on Railway: check logs; ensure DB variables are correct and `DATABASE_SSL=true`.
 - Images not loading: ensure Cloudinary credentials are correct.
 - CORS error on frontend: make sure `PUBLIC_URL` is set and `middlewares.ts` allows your Vercel domain.
+
+---
+
+# Copy-Paste Commands & GitHub Auto-Deploy
+
+## A) Local Setup (optional)
+```bash
+# Windows PowerShell or Bash
+cd aktech-cms
+npm install
+
+# Local dev with SQLite
+npm run develop
+# Open http://localhost:1337/admin to create admin
+```
+
+## B) Push to GitHub
+```bash
+# From your repository root (one level above aktech-cms)
+git add .
+git commit -m "feat(cms): add Strapi aktech-cms backend"
+# If remote not set yet
+git remote add origin https://github.com/<YOUR_USER>/<YOUR_REPO>.git
+git push -u origin main
+```
+
+## C) Railway: Deploy from GitHub
+1. Railway → New Project → Provision PostgreSQL
+2. Railway → New Service → Deploy from GitHub → select repo → set root/path to `aktech-cms`
+3. Add Environment Variables (Service → Variables):
+```
+APP_KEYS=key1,key2,key3,key4
+API_TOKEN_SALT=your_api_token_salt
+ADMIN_JWT_SECRET=your_admin_jwt_secret
+JWT_SECRET=your_jwt_secret
+NODE_ENV=production
+PORT=1337
+PUBLIC_URL=https://<your-railway-domain>
+CLOUDINARY_CLOUD_NAME=<from cloudinary>
+CLOUDINARY_API_KEY=<from cloudinary>
+CLOUDINARY_API_SECRET=<from cloudinary>
+DATABASE_HOST=<from railway postgres>
+DATABASE_PORT=5432
+DATABASE_NAME=<from railway postgres>
+DATABASE_USERNAME=<from railway postgres>
+DATABASE_PASSWORD=<from railway postgres>
+DATABASE_SSL=true
+```
+
+Deploy starts automatically. After success, open `/admin` and finish setup.
+
+## D) Vercel: Frontend Auto-Deploy
+1. On Vercel, import your Next.js repo (or open existing project)
+2. Set Environment Variable:
+```
+NEXT_PUBLIC_CMS_URL=https://<your-railway-domain>
+```
+3. Redeploy. Every push to `main` will auto-deploy.
+
+## E) Strapi Public API Permissions (once)
+Settings → Users & Permissions Plugin → Roles → Public → Content-type: Post → enable:
+- find
+- findOne
+- and Custom route: GET /posts/slug/:slug
+
+Save and test:
+```
+curl "https://<your-railway-domain>/api/posts?populate=cover&sort=createdAt:desc"
+curl "https://<your-railway-domain>/api/posts/slug/<your-slug>"
+```
