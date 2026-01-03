@@ -6,9 +6,14 @@ import { Badge } from "@/components/ui/badge";
 interface BlogCardProps {
   post: BlogPost;
   featured?: boolean;
+  priority?: boolean;
 }
 
-const BlogCard = ({ post, featured = false }: BlogCardProps) => {
+const BlogCard = ({ post, featured = false, priority = false }: BlogCardProps) => {
+  const imgSrc = post.image.includes("images.unsplash.com")
+    ? `${post.image}&fm=webp&q=75&auto=format`
+    : post.image;
+
   if (featured) {
     return (
       <Link to={`/blog/${post.slug}`} className="group block">
@@ -16,8 +21,12 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
           <div className="grid md:grid-cols-2 gap-0">
             <div className="relative h-64 md:h-full overflow-hidden">
               <img
-                src={post.image}
+                src={imgSrc}
                 alt={post.title}
+                loading={priority ? "eager" : "lazy"}
+                decoding="async"
+                {...(priority ? { fetchPriority: "high" as const } : {})}
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent md:hidden" />
@@ -66,8 +75,12 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
       <article className="overflow-hidden rounded-xl bg-card card-shadow h-full flex flex-col">
         <div className="relative h-48 overflow-hidden">
           <img
-            src={post.image}
+            src={imgSrc}
             alt={post.title}
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+            {...(priority ? { fetchPriority: "high" as const } : {})}
+            sizes="(max-width: 1024px) 100vw, 33vw"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>

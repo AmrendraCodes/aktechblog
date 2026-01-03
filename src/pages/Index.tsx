@@ -65,8 +65,8 @@ const Index = () => {
           </div>
           
           <div className="space-y-8">
-            {featuredPosts.slice(0, 2).map((post) => (
-              <BlogCard key={post.slug} post={post} featured />
+            {featuredPosts.slice(0, 2).map((post, idx) => (
+              <BlogCard key={post.slug} post={post} featured priority={idx === 0} />
             ))}
           </div>
         </div>
@@ -89,8 +89,8 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentPosts.map((post) => (
-              <BlogCard key={post.slug} post={post} />
+            {recentPosts.map((post, idx) => (
+              <BlogCard key={post.slug} post={post} priority={idx === 0} />
             ))}
           </div>
 
