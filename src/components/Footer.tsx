@@ -1,16 +1,12 @@
 import { Link } from "react-router-dom";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
-
 const Footer = () => {
-  return (
-    <footer className="border-t border-border bg-card">
+  return <footer className="border-t border-border bg-card">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link to="/" className="text-2xl font-serif font-bold gradient-text">
-              Blogify
-            </Link>
+            <Link to="/" className="text-2xl font-serif font-bold gradient-text">Tech Blog </Link>
             <p className="mt-4 text-muted-foreground max-w-md">
               Sharing insights on web development, design, and technology. 
               Join our community of developers and designers.
@@ -80,8 +76,6 @@ const Footer = () => {
           <p>&copy; {new Date().getFullYear()} Blogify. All rights reserved.</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
