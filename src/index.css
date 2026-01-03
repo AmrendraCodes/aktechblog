@@ -700,3 +700,23 @@ button, .btn { min-height: 40px; padding-left: 0.875rem; padding-right: 0.875rem
 /* Images inside article content keep aspect and avoid overflow */
 .prose-blog img { width: 100%; height: auto; object-fit: cover; border-radius: 0.5rem; }
 
+/* === Modern, Clean Theme (CSS-only, non-breaking) === */
+/* Cards: subtle border and shadow */
+.bg-card { background-color: #ffffff; }
+.card-shadow { box-shadow: 0 1px 2px rgba(17,24,39,0.06); border: 1px solid #e5e7eb; }
+.card-shadow:hover { box-shadow: 0 4px 10px rgba(17,24,39,0.08); }
+
+/* Links: clearer hover without color shift */
+a { text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* Headings: consistent spacing */
+h1 { margin-bottom: 0.75rem; }
+h2 { margin-top: 1.25rem; margin-bottom: 0.5rem; }
+h3 { margin-top: 1rem; margin-bottom: 0.5rem; }
+
+/* Mobile menu background for safety */
+@media (max-width: 768px) {
+  header nav { background-color: #ffffff; }
+}
+
