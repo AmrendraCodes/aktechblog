@@ -83,6 +83,9 @@ const BlogPost = () => {
         <img
           src={post.image}
           alt={post.title}
+          fetchPriority="high"
+          decoding="async"
+          sizes="100vw"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />

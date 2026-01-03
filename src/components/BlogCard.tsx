@@ -18,6 +18,9 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
               <img
                 src={post.image}
                 alt={post.title}
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent md:hidden" />
@@ -68,6 +71,9 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
           <img
             src={post.image}
             alt={post.title}
+            loading="lazy"
+            decoding="async"
+            sizes="(max-width: 1024px) 100vw, 33vw"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
