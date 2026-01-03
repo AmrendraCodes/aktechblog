@@ -675,3 +675,28 @@ body {
 .prose-blog h1, .prose-blog h2, .prose-blog h3 { font-weight: 700; }
 .prose-blog p { color: inherit; }
 
+/* === Mobile Responsiveness & Small Polish (CSS-only) === */
+html, body { overflow-x: hidden; }
+
+img, video { max-width: 100%; height: auto; display: block; }
+
+/* Ensure consistent container padding on small screens */
+.container { padding-left: 1rem; padding-right: 1rem; }
+
+/* Improve tap targets for header/navigation links without altering markup */
+header a { display: inline-block; padding: 6px 10px; }
+
+/* Headings scale down slightly on small devices */
+@media (max-width: 640px) {
+  h1 { font-size: 1.875rem; line-height: 2.25rem; }
+  h2 { font-size: 1.5rem; line-height: 2rem; }
+  h3 { font-size: 1.25rem; line-height: 1.75rem; }
+  .prose-blog { padding-left: 0.25rem; padding-right: 0.25rem; }
+}
+
+/* Buttons: ensure comfortable size on touch devices */
+button, .btn { min-height: 40px; padding-left: 0.875rem; padding-right: 0.875rem; }
+
+/* Images inside article content keep aspect and avoid overflow */
+.prose-blog img { width: 100%; height: auto; object-fit: cover; border-radius: 0.5rem; }
+
