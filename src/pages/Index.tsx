@@ -27,9 +27,7 @@ const Index = () => {
               Welcome to Blogify
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 animate-fade-up opacity-0 stagger-2">
-              Insights on{" "}
-              <span className="gradient-text">Development</span>{" "}
-              & Design
+              Daily <span className="gradient-text">Insight</span> Hub
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-up opacity-0 stagger-3">
               Discover tutorials, tips, and insights on web development, design systems, 

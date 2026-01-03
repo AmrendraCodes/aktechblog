@@ -43,7 +43,15 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map(link => {})}
+            {navLinks.map(link => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.href) ? "text-primary" : "text-muted-foreground"}`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           {/* Right side actions */}
