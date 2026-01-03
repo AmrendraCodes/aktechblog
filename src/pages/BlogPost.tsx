@@ -1,10 +1,19 @@
 import { useParams, Link, Navigate } from "react-router-dom";
-import { ArrowLeft, Calendar, Clock, User, Share2, Twitter, Linkedin } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, User, Share2, Twitter, Linkedin, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
 import BlogCard from "@/components/BlogCard";
+import ReadingProgress from "@/components/ReadingProgress";
 import { getPostBySlug, blogPosts } from "@/data/blogPosts";
+
+// Calculate reading time based on content
+const calculateReadingTime = (content: string): { minutes: number; words: number } => {
+  const wordsPerMinute = 200;
+  const words = content.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return { minutes, words };
+};
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -13,6 +22,8 @@ const BlogPost = () => {
   if (!post) {
     return <Navigate to="/blog" replace />;
   }
+
+  const { minutes, words } = calculateReadingTime(post.content);
 
   const relatedPosts = blogPosts
     .filter((p) => p.category === post.category && p.slug !== post.slug)
@@ -65,6 +76,8 @@ const BlogPost = () => {
 
   return (
     <Layout>
+      <ReadingProgress />
+      
       {/* Hero Image */}
       <div className="relative h-64 md:h-96 overflow-hidden">
         <img
@@ -105,6 +118,18 @@ const BlogPost = () => {
             <p className="text-lg text-muted-foreground mb-6">
               {post.excerpt}
             </p>
+
+            {/* Reading Stats */}
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-medium">
+                <Clock className="h-4 w-4" />
+                {minutes} min read
+              </div>
+              <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-sm font-medium">
+                <BookOpen className="h-4 w-4" />
+                {words.toLocaleString()} words
+              </div>
+            </div>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-t border-border pt-6">
               <span className="flex items-center gap-2">
