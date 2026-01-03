@@ -1,0 +1,23 @@
+{
+  "name": "aktech-cms",
+  "version": "1.0.0",
+  "private": true,
+  "engines": { "node": ">=18.0.0", "npm": ">=9.0.0" },
+  "scripts": {
+    "develop": "strapi develop",
+    "build": "strapi build",
+    "start": "strapi start",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@strapi/strapi": "^4.24.6",
+    "@strapi/provider-upload-cloudinary": "^4.24.6",
+    "pg": "^8.11.3",
+    "sqlite3": "^5.1.6",
+    "cross-env": "^7.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.5"
+  }
+}
