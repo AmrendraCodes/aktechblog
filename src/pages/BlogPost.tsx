@@ -10,10 +10,15 @@ import { fetchArticleBySlug, mapSingleArticleToUi, mapArticlesToUi, fetchArticle
 
 // Calculate reading time based on content
 const calculateReadingTime = (content: string): { minutes: number; words: number } => {
-  const wordsPerMinute = 200;
-  const words = content.trim().split(/\s+/).length;
-  const minutes = Math.ceil(words / wordsPerMinute);
-  return { minutes, words };
+  try {
+    const wordsPerMinute = 200;
+    const words = content.trim().split(/\s+/).length;
+    const minutes = Math.ceil(words / wordsPerMinute);
+    return { minutes, words };
+  } catch (error) {
+    console.warn('Error calculating reading time:', error);
+    return { minutes: 1, words: 0 };
+  }
 };
 
 const BlogPost = () => {
@@ -25,30 +30,62 @@ const BlogPost = () => {
 
   useEffect(() => {
     let mounted = true;
-    (async () => {
+    
+    const fetchData = async () => {
       if (!slug) {
-        if (mounted) setError("Slug not provided");
-        if (mounted) setLoading(false);
+        if (mounted) {
+          setError("Article slug not provided");
+          setLoading(false);
+        }
         return;
       }
+
       try {
+        setLoading(true);
+        setError(null);
+        
+        // Fetch main article
         const json = await fetchArticleBySlug(slug);
         const mapped = mapSingleArticleToUi(json);
+        
+        if (!mapped || !mapped.slug) {
+          throw new Error("Invalid article data received");
+        }
+        
         if (mounted) setPost(mapped);
-        // Fetch related posts (same category, excluding current)
-        const allJson = await fetchArticles();
-        const allMapped = mapArticlesToUi(allJson);
-        const filtered = allMapped.filter(p => p.category === mapped?.category && p.slug !== slug).slice(0, 2);
-        if (mounted) setRelated(filtered);
+
+        // Fetch related posts with error handling
+        try {
+          const allJson = await fetchArticles();
+          const allMapped = mapArticlesToUi(allJson);
+          const filtered = allMapped
+            .filter(p => p.category === mapped?.category && p.slug !== slug)
+            .slice(0, 2);
+          if (mounted) setRelated(filtered);
+        } catch (relatedError) {
+          console.warn('Failed to fetch related posts:', relatedError);
+          // Don't fail the main article if related posts fail
+          if (mounted) setRelated([]);
+        }
+        
       } catch (e: any) {
-        if (mounted) setError(e?.message || "Failed to load article");
+        console.error('Error fetching article:', e);
+        if (mounted) {
+          setError(e?.message || "Failed to load article");
+        }
       } finally {
         if (mounted) setLoading(false);
       }
-    })();
-    return () => { mounted = false; };
+    };
+
+    fetchData();
+    
+    return () => { 
+      mounted = false; 
+    };
   }, [slug]);
 
+  // Loading state
   if (loading) {
     return (
       <Layout>
@@ -70,55 +107,80 @@ const BlogPost = () => {
     );
   }
 
+  // Error state - redirect to blog instead of showing blank
   if (error || !post) {
     return <Navigate to="/blog" replace />;
   }
 
-  const { minutes, words } = calculateReadingTime(post.content);
+  const { minutes, words } = calculateReadingTime(post.content || '');
 
-  // Simple markdown to HTML conversion
+  // Safe markdown to HTML conversion
   const renderContent = (content: string) => {
+    if (!content || typeof content !== 'string') {
+      return <p className="mb-4 text-muted-foreground">No content available.</p>;
+    }
+
     return content
       .split('\n')
       .map((line, index) => {
-        if (line.startsWith('# ')) {
-          return <h1 key={index} className="text-4xl font-serif font-bold mb-6 mt-8">{line.slice(2)}</h1>;
+        if (!line) return <br key={index} />;
+        
+        try {
+          if (line.startsWith('# ')) {
+            return <h1 key={index} className="text-4xl font-serif font-bold mb-6 mt-8">{line.slice(2)}</h1>;
+          }
+          if (line.startsWith('## ')) {
+            return <h2 key={index} className="text-2xl font-serif font-semibold mt-10 mb-4">{line.slice(3)}</h2>;
+          }
+          if (line.startsWith('> ')) {
+            return <blockquote key={index} className="border-l-4 border-primary pl-4 italic my-6 text-muted-foreground">{line.slice(2)}</blockquote>;
+          }
+          if (line.startsWith('```')) {
+            return null; // Skip code block markers
+          }
+          if (line.startsWith('- ')) {
+            return <li key={index} className="ml-6 text-muted-foreground mb-2">{line.slice(2)}</li>;
+          }
+          if (line.match(/^\d+\. /)) {
+            return <li key={index} className="ml-6 text-muted-foreground mb-2 list-decimal">{line.replace(/^\d+\. /, '')}</li>;
+          }
+          
+          // Handle inline code
+          const parts = line.split(/`([^`]+)`/);
+          if (parts.length > 1) {
+            return (
+              <p key={index} className="mb-4 text-muted-foreground leading-relaxed">
+                {parts.map((part, i) => 
+                  i % 2 === 1 ? (
+                    <code key={i} className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">{part}</code>
+                  ) : (
+                    part
+                  )
+                )}
+              </p>
+            );
+          }
+          
+          return <p key={index} className="mb-4 text-muted-foreground leading-relaxed">{line}</p>;
+        } catch (lineError) {
+          console.warn('Error rendering line:', line, lineError);
+          return <p key={index} className="mb-4 text-muted-foreground">{line}</p>;
         }
-        if (line.startsWith('## ')) {
-          return <h2 key={index} className="text-2xl font-serif font-semibold mt-10 mb-4">{line.slice(3)}</h2>;
-        }
-        if (line.startsWith('> ')) {
-          return <blockquote key={index} className="border-l-4 border-primary pl-4 italic my-6 text-muted-foreground">{line.slice(2)}</blockquote>;
-        }
-        if (line.startsWith('```')) {
-          return null;
-        }
-        if (line.startsWith('- ')) {
-          return <li key={index} className="ml-6 text-muted-foreground mb-2">{line.slice(2)}</li>;
-        }
-        if (line.match(/^\d+\. /)) {
-          return <li key={index} className="ml-6 text-muted-foreground mb-2 list-decimal">{line.replace(/^\d+\. /, '')}</li>;
-        }
-        if (line.trim() === '') {
-          return <br key={index} />;
-        }
-        // Handle inline code
-        const parts = line.split(/`([^`]+)`/);
-        if (parts.length > 1) {
-          return (
-            <p key={index} className="mb-4 text-muted-foreground leading-relaxed">
-              {parts.map((part, i) => 
-                i % 2 === 1 ? (
-                  <code key={i} className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">{part}</code>
-                ) : (
-                  part
-                )
-              )}
-            </p>
-          );
-        }
-        return <p key={index} className="mb-4 text-muted-foreground leading-relaxed">{line}</p>;
       });
+  };
+
+  // Safe date formatting
+  const formatDate = (dateString: string) => {
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    } catch (error) {
+      console.warn('Error formatting date:', error);
+      return 'Invalid date';
+    }
   };
 
   return (
@@ -128,12 +190,16 @@ const BlogPost = () => {
       {/* Hero Image */}
       <div className="relative h-64 md:h-96 overflow-hidden">
         <img
-          src={post.image}
-          alt={post.title}
-          fetchPriority="high"
+          src={post.image || '/placeholder.svg'}
+          alt={post.title || 'Article'}
+          loading="eager"
           decoding="async"
           sizes="100vw"
           className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = '/placeholder.svg';
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
       </div>
@@ -152,7 +218,7 @@ const BlogPost = () => {
           <header className="bg-card rounded-2xl p-6 md:p-10 card-shadow mb-8">
             <div className="flex flex-wrap gap-2 mb-6">
               <Badge variant="secondary" className="bg-[#f0f0f0] text-black border-0">
-                {post.category}
+                {post.category || 'Uncategorized'}
               </Badge>
               <Badge variant="outline" className="bg-[#f0f0f0] text-black border-0">
                 {minutes} min read
@@ -160,11 +226,11 @@ const BlogPost = () => {
             </div>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6">
-              {post.title}
+              {post.title || 'Untitled Article'}
             </h1>
 
             <p className="text-lg text-muted-foreground mb-6">
-              {post.excerpt}
+              {post.excerpt || 'No excerpt available.'}
             </p>
 
             {/* Reading Stats */}
@@ -182,26 +248,22 @@ const BlogPost = () => {
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground border-t border-border pt-6">
               <span className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                {post.author}
+                {post.author || 'Anonymous'}
               </span>
               <span className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                {new Date(post.date).toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
+                {formatDate(post.date)}
               </span>
               <span className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
-                {post.readTime}
+                {post.readTime || `${minutes} min read`}
               </span>
             </div>
           </header>
 
           {/* Article Content */}
           <div className="prose-blog">
-            {renderContent(post.content)}
+            {renderContent(post.content || '')}
           </div>
 
           {/* Share */}
@@ -222,10 +284,10 @@ const BlogPost = () => {
           <div className="mt-12 p-6 bg-muted/50 rounded-2xl">
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white text-xl font-bold">
-                {post.author.charAt(0)}
+                {(post.author || 'A').charAt(0)}
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Written by {post.author}</h3>
+                <h3 className="font-semibold mb-1">Written by {post.author || 'Anonymous'}</h3>
                 <p className="text-sm text-muted-foreground">
                   Tech writer and developer passionate about creating great user experiences.
                 </p>
@@ -236,7 +298,7 @@ const BlogPost = () => {
       </article>
 
       {/* Related Posts */}
-      {related.length > 0 && (
+      {related && related.length > 0 && (
         <section className="py-16 md:py-24 mt-12 bg-muted/30">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-serif font-bold mb-8 text-center">
