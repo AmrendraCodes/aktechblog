@@ -18,7 +18,9 @@ const Blog = () => {
     (async () => {
       try {
         const json = await fetchArticles(); // uses populate=*
+        console.log("Raw Strapi response:", json);
         const mapped = mapArticlesToUi(json);
+        console.log("Mapped UI posts:", mapped);
         if (mounted) setItems(mapped);
       } catch (e: any) {
         if (mounted) setError(e?.message || "Failed to load articles");
