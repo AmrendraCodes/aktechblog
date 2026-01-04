@@ -1,10 +1,19 @@
 import { Link } from "react-router-dom";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
-import { BlogPost } from "@/data/blogPosts";
 import { Badge } from "@/components/ui/badge";
 
+interface BlogCardPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  date: string;
+  readTime: string;
+  category: string;
+}
+
 interface BlogCardProps {
-  post: BlogPost;
+  post: BlogCardPost;
   featured?: boolean;
   priority?: boolean;
 }

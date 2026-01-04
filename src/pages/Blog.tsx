@@ -1,27 +1,52 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import BlogCard from "@/components/BlogCard";
-import { blogPosts, categories } from "@/data/blogPosts";
+import { fetchArticles, mapArticlesToUi } from "@/lib/strapi";
 
 const Blog = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [items, setItems] = useState([] as ReturnType<typeof mapArticlesToUi>);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const json = await fetchArticles(); // uses populate=*
+        const mapped = mapArticlesToUi(json);
+        if (mounted) setItems(mapped);
+      } catch (e: any) {
+        if (mounted) setError(e?.message || "Failed to load articles");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    items.forEach(p => set.add(p.category));
+    return ["All", ...Array.from(set)];
+  }, [items]);
 
   const filteredPosts = useMemo(() => {
-    return blogPosts.filter((post) => {
+    return items.filter((post) => {
       const matchesSearch = 
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+        false; // no tags field in mapped UI; keep search simple
       
       const matchesCategory = activeCategory === "All" || post.category === activeCategory;
       
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, activeCategory]);
+  }, [searchQuery, activeCategory, items]);
 
   return (
     <Layout>
@@ -62,7 +87,7 @@ const Blog = () => {
                 variant={activeCategory === category ? "default" : "outline"}
                 size="sm"
                 onClick={() => setActiveCategory(category)}
-                className={activeCategory === category ? "gradient-bg" : ""}
+                className=""
               >
                 {category}
               </Button>
@@ -70,7 +95,18 @@ const Blog = () => {
           </div>
 
           {/* Posts Grid */}
-          {filteredPosts.length > 0 ? (
+          {loading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="rounded-xl card-shadow bg-white p-6 skeleton" style={{height: 280}} />
+              ))}
+            </div>
+          ) : error ? (
+            <div className="text-center py-16">
+              <p className="text-xl text-foreground/70 mb-4">{error}</p>
+              <Button onClick={() => window.location.reload()}>Retry</Button>
+            </div>
+          ) : filteredPosts.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPosts.map((post) => (
                 <BlogCard key={post.slug} post={post} />
@@ -78,7 +114,7 @@ const Blog = () => {
             </div>
           ) : (
             <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground mb-4">No articles found</p>
+              <p className="text-xl text-foreground/70 mb-4">No articles found</p>
               <Button 
                 variant="outline" 
                 onClick={() => {
