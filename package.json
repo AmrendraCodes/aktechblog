@@ -9,8 +9,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "build": "npm run generate-sitemap && vite build",
+    "build:dev": "npm run generate-sitemap && vite build --mode development",
+    "generate-sitemap": "node generate-sitemap.cjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "update-browsers": "npx update-browserslist-db@latest"
