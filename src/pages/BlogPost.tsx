@@ -1,11 +1,12 @@
 import { useParams, Link, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { ArrowLeft, Calendar, Clock, User, Share2, Twitter, Linkedin, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
 import BlogCard from "@/components/BlogCard";
 import ReadingProgress from "@/components/ReadingProgress";
-import { getPostBySlug, blogPosts } from "@/data/blogPosts";
+import { fetchArticleBySlug, mapSingleArticleToUi, mapArticlesToUi, fetchArticles } from "@/lib/strapi";
 
 // Calculate reading time based on content
 const calculateReadingTime = (content: string): { minutes: number; words: number } => {

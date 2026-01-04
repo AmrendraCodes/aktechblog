@@ -108,8 +108,10 @@ const Blog = () => {
             </div>
           ) : filteredPosts.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPosts.map((post) => (
-                <BlogCard key={post.slug} post={post} />
+              {filteredPosts.map((post, idx) => (
+                <div key={post.slug} className="animate-fadeInUp" style={{animationDelay: `${idx * 80}ms`}}>
+                  <BlogCard post={post} />
+                </div>
               ))}
             </div>
           ) : (
