@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
-import About from "./pages/About";
 import AboutInteractive from "./pages/AboutInteractive";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
