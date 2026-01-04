@@ -4,7 +4,8 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import { LazyBlogCard } from "@/components/LazyBlogCard";
-import Newsletter from "@/components/Newsletter";
+import { DynamicNewsletter } from "@/components/DynamicNewsletter";
+import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import { fetchArticles, mapArticlesToUi } from "@/lib/strapi";
 
 const Index = () => {
@@ -141,7 +142,7 @@ const Index = () => {
       </section>
 
       {/* Newsletter */}
-      <Newsletter />
+      <DynamicNewsletter />
     </Layout>
   );
 };
