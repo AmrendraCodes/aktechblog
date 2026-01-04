@@ -29,44 +29,11 @@ export default defineConfig((env: ConfigEnv) => {
       minify: "esbuild" as const,
       target: "esnext",
       // Reduce chunk size for better caching
-      chunkSizeWarningLimit: 500,
+      chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
-          // Aggressive chunk splitting for better caching
-          manualChunks: (id) => {
-            // Vendor libraries
-            if (id.includes('node_modules')) {
-              // React ecosystem
-              if (id.includes('react') || id.includes('react-dom')) {
-                return 'react-vendor';
-              }
-              // Router
-              if (id.includes('react-router')) {
-                return 'router';
-              }
-              // UI libraries
-              if (id.includes('@radix-ui')) {
-                return 'ui-vendor';
-              }
-              // Icons
-              if (id.includes('lucide')) {
-                return 'icons';
-              }
-              // Utilities
-              if (id.includes('clsx') || id.includes('tailwind-merge') || id.includes('date-fns')) {
-                return 'utils';
-              }
-              // Everything else
-              return 'vendor';
-            }
-            // App chunks
-            if (id.includes('pages')) {
-              return 'pages';
-            }
-            if (id.includes('components')) {
-              return 'components';
-            }
-          },
+          // Simplified chunk splitting to avoid empty chunks
+          manualChunks: undefined,
           // Optimize chunk naming for long-term caching
           chunkFileNames: isProduction 
             ? "assets/js/[name]-[hash].js"
@@ -78,8 +45,6 @@ export default defineConfig((env: ConfigEnv) => {
             ? "assets/[ext]/[name]-[hash].[ext]"
             : "assets/[ext]/[name].[ext]",
         },
-        // Additional rollup optimizations
-        treeshake: 'smallest',
       },
       // Enable CSS code splitting and optimization
       cssCodeSplit: true,
@@ -108,7 +73,7 @@ export default defineConfig((env: ConfigEnv) => {
     // Enable compression for development
     esbuild: {
       target: 'esnext',
-      drop: isProduction ? ['console', 'debugger'] : [],
+      drop: isProduction ? ['console', 'debugger'] as any : [],
     },
   };
 });

@@ -48,10 +48,26 @@ class ErrorBoundary extends React.Component<
   }
 }
 
+// Add a loading indicator
+const LoadingIndicator = () => (
+  <div style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '100vh',
+    fontSize: '18px',
+    color: '#666'
+  }}>
+    Loading AK Tech Blog...
+  </div>
+);
+
 root.render(
   <React.StrictMode>
     <ErrorBoundary>
-      <App />
+      <React.Suspense fallback={<LoadingIndicator />}>
+        <App />
+      </React.Suspense>
     </ErrorBoundary>
   </React.StrictMode>
 );

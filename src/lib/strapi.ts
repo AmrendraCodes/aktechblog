@@ -2,9 +2,8 @@
 // Uses NEXT_PUBLIC_STRAPI_URL if provided, with fallback to VITE_STRAPI_URL
 
 const BASE = (
-  (import.meta as any)?.env?.NEXT_PUBLIC_STRAPI_URL ||
   (import.meta as any)?.env?.VITE_STRAPI_URL ||
-  (typeof process !== 'undefined' ? (process as any).env?.NEXT_PUBLIC_STRAPI_URL : '') ||
+  (typeof process !== 'undefined' ? (process as any).env?.VITE_STRAPI_URL : '') ||
   ''
 ) as string;
 
