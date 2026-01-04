@@ -17,12 +17,7 @@ export default defineConfig((env: ConfigEnv) => {
       port: 8080,
       open: true,
     },
-    plugins: [
-      react({
-        // Enable Fast Refresh in development
-        fastRefresh: !isProduction,
-      }),
-    ],
+    plugins: [react()],
     resolve: {
       alias: {
         "@": path.resolve(process.cwd(), "src"),
@@ -31,13 +26,8 @@ export default defineConfig((env: ConfigEnv) => {
     build: {
       sourcemap: false,
       // Optimize build for production
-      minify: "terser",
-      terserOptions: {
-        compress: {
-          drop_console: isProduction,
-          drop_debugger: isProduction,
-        },
-      },
+      minify: "esbuild" as const,
+      target: "esnext",
       rollupOptions: {
         output: {
           // Split vendor chunks for better caching
