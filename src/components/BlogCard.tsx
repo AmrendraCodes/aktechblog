@@ -34,7 +34,6 @@ const BlogCard = ({ post, featured = false, priority = false }: BlogCardProps) =
                 alt={post.title}
                 loading={priority ? "eager" : "lazy"}
                 decoding="async"
-                {...(priority ? { fetchPriority: "high" as const } : {})}
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -88,7 +87,6 @@ const BlogCard = ({ post, featured = false, priority = false }: BlogCardProps) =
             alt={post.title}
             loading={priority ? "eager" : "lazy"}
             decoding="async"
-            {...(priority ? { fetchPriority: "high" as const } : {})}
             sizes="(max-width: 1024px) 100vw, 33vw"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
