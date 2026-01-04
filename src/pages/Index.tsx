@@ -34,6 +34,9 @@ const Index = () => {
 
   return (
     <Layout>
+      {/* Performance Monitor - tracks Core Web Vitals */}
+      <PerformanceMonitor />
+      
       {/* Hero Section (Clean) */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
