@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Header from "./Header";
+import Navigation from "./Navigation";
 import Footer from "./Footer";
 
 interface LayoutProps {
@@ -9,7 +9,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden">
-      <Header />
+      <Navigation />
       <main className="flex-grow overflow-x-hidden">{children}</main>
       <Footer />
     </div>
