@@ -81,6 +81,7 @@ export function mapArticlesToUi(data: any): UiPost[] {
       readTime: a?.readTime || '5 min',
       category: categoryName,
       slug: a?.slug || String(it?.id || a?.id || ''),
+      imageData: a?.cover?.data || a?.image?.data || null,
     };
   });
 }

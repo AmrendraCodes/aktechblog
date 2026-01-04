@@ -10,6 +10,7 @@ interface BlogCardPost {
   date: string;
   readTime: string;
   category: string;
+  imageData?: any; // Raw image data for debugging
 }
 
 interface BlogCardProps {
@@ -19,9 +20,12 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post, featured = false, priority = false }: BlogCardProps) => {
-  const imgSrc = post.image.includes("images.unsplash.com")
-    ? `${post.image}&fm=webp&q=75&auto=format`
-    : post.image;
+  // Handle image URL with null safety
+  const imgSrc = post.image 
+    ? post.image.includes("images.unsplash.com")
+      ? `${post.image}&fm=webp&q=75&auto=format`
+      : post.image
+    : '/placeholder.svg'; // Fallback image
 
   if (featured) {
     return (
@@ -36,6 +40,10 @@ const BlogCard = ({ post, featured = false, priority = false }: BlogCardProps) =
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/placeholder.svg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent md:hidden" />
             </div>
@@ -89,6 +97,10 @@ const BlogCard = ({ post, featured = false, priority = false }: BlogCardProps) =
             decoding="async"
             sizes="(max-width: 1024px) 100vw, 33vw"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = '/placeholder.svg';
+            }}
           />
         </div>
         <div className="p-6 flex flex-col flex-grow">
