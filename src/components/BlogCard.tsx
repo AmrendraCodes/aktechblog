@@ -41,7 +41,7 @@ const BlogCard = ({ post, featured = false, priority = false }: BlogCardProps) =
               <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent md:hidden" />
             </div>
             <div className="p-6 md:p-8 flex flex-col justify-center">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-3">
                 <Badge variant="secondary" className="bg-[#f0f0f0] text-black border-0">
                   {post.category}
                 </Badge>
@@ -103,7 +103,7 @@ const BlogCard = ({ post, featured = false, priority = false }: BlogCardProps) =
           <p className="text-[#666] text-base mb-4 line-clamp-3 flex-grow">
             {post.excerpt}
           </p>
-          <div className="flex items-center justify-between text-sm text-[#888]">
+          <div className="flex items-center justify-between text-sm text-[#888] mt-auto">
             <span className="flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" />
               {new Date(post.date).toLocaleDateString('en-US', { 
