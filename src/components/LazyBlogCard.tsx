@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { OptimizedImage } from "@/components/OptimizedImage";
+import LazyImage from "./LazyImage";
 
 interface BlogCardPost {
   slug: string;

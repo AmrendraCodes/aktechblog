@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import BlogCard from "@/components/BlogCard";
+import { LazyBlogCard } from "@/components/LazyBlogCard";
 import { fetchArticles, mapArticlesToUi } from "@/lib/strapi";
 
 const Blog = () => {
@@ -107,11 +107,9 @@ const Blog = () => {
               <Button onClick={() => window.location.reload()}>Retry</Button>
             </div>
           ) : filteredPosts.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredPosts.map((post, idx) => (
-                <div key={post.slug} className="animate-fadeInUp" style={{animationDelay: `${idx * 80}ms`}}>
-                  <BlogCard post={post} />
-                </div>
+                <LazyBlogCard key={post.slug} post={post} priority={idx < 3} />
               ))}
             </div>
           ) : (

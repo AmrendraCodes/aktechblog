@@ -25,19 +25,49 @@ export default defineConfig((env: ConfigEnv) => {
     },
     build: {
       sourcemap: false,
-      // Optimize build for production
+      // Aggressive optimization for production
       minify: "esbuild" as const,
       target: "esnext",
+      // Reduce chunk size for better caching
+      chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
-          // Split vendor chunks for better caching
-          manualChunks: {
-            vendor: ['react', 'react-dom'],
-            router: ['react-router-dom'],
-            ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
-            utils: ['clsx', 'tailwind-merge', 'date-fns'],
+          // Aggressive chunk splitting for better caching
+          manualChunks: (id) => {
+            // Vendor libraries
+            if (id.includes('node_modules')) {
+              // React ecosystem
+              if (id.includes('react') || id.includes('react-dom')) {
+                return 'react-vendor';
+              }
+              // Router
+              if (id.includes('react-router')) {
+                return 'router';
+              }
+              // UI libraries
+              if (id.includes('@radix-ui')) {
+                return 'ui-vendor';
+              }
+              // Icons
+              if (id.includes('lucide')) {
+                return 'icons';
+              }
+              // Utilities
+              if (id.includes('clsx') || id.includes('tailwind-merge') || id.includes('date-fns')) {
+                return 'utils';
+              }
+              // Everything else
+              return 'vendor';
+            }
+            // App chunks
+            if (id.includes('pages')) {
+              return 'pages';
+            }
+            if (id.includes('components')) {
+              return 'components';
+            }
           },
-          // Optimize chunk naming for caching
+          // Optimize chunk naming for long-term caching
           chunkFileNames: isProduction 
             ? "assets/js/[name]-[hash].js"
             : "assets/js/[name].js",
@@ -48,19 +78,38 @@ export default defineConfig((env: ConfigEnv) => {
             ? "assets/[ext]/[name]-[hash].[ext]"
             : "assets/[ext]/[name].[ext]",
         },
+        // Additional rollup optimizations
+        treeshake: 'smallest',
+        compact: true,
       },
-      // Enable CSS code splitting
+      // Enable CSS code splitting and optimization
       cssCodeSplit: true,
-      // Set chunk size warning limit
-      chunkSizeWarningLimit: 1000,
+      // Inline CSS for critical path
+      cssMinify: true,
     },
-    // Optimize dependencies
+    // Optimize dependencies for faster builds
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react-router-dom'],
+      include: [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        '@radix-ui/react-dialog',
+        '@radix-ui/react-dropdown-menu',
+        'lucide-react',
+        'clsx',
+        'tailwind-merge',
+        'date-fns'
+      ],
     },
     // Define global constants
     define: {
       __DEV__: JSON.stringify(!isProduction),
+      __PROD__: JSON.stringify(isProduction),
+    },
+    // Enable compression for development
+    esbuild: {
+      target: 'esnext',
+      drop: isProduction ? ['console', 'debugger'] : [],
     },
   };
 });

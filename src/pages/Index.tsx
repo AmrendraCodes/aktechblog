@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
-import BlogCard from "@/components/BlogCard";
+import { LazyBlogCard } from "@/components/LazyBlogCard";
 import Newsletter from "@/components/Newsletter";
 import { fetchArticles, mapArticlesToUi } from "@/lib/strapi";
 
@@ -88,7 +88,7 @@ const Index = () => {
           ) : (
             <div className="space-y-8">
               {featuredPosts.slice(0, 2).map((post, idx) => (
-                <BlogCard key={post.slug} post={post} featured priority={idx === 0} />
+                <LazyBlogCard key={post.slug} post={post} featured priority={idx === 0} />
               ))}
             </div>
           )}
@@ -124,7 +124,7 @@ const Index = () => {
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {recentPosts.map((post, idx) => (
-                <BlogCard key={post.slug} post={post} priority={idx === 0} />
+                <LazyBlogCard key={post.slug} post={post} priority={idx === 0} />
               ))}
             </div>
           )}
