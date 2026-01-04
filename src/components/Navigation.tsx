@@ -40,10 +40,6 @@ const Navigation = () => {
       label: "About"
     },
     {
-      href: "/about-interactive",
-      label: "Interactive About"
-    },
-    {
       href: "/contact",
       label: "Contact"
     }
