@@ -12,36 +12,26 @@ const Index = () => {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
-        </div>
-        
+      {/* Hero Section (Clean) */}
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-up opacity-0 stagger-1">
-              <Sparkles className="h-4 w-4" />
-              Welcome to Blogify
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-medium mb-4">
+              <Sparkles className="h-4 w-4" /> Latest from the blog
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 animate-fade-up opacity-0 stagger-2">
-              Daily <span className="gradient-text">Insight</span> Hub
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-up opacity-0 stagger-3">
-              Discover tutorials, tips, and insights on web development, design systems, 
-              and building great user experiences. Updated weekly.
+            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight mb-4">AK Tech Blog</h1>
+            <p className="text-base md:text-lg text-foreground/70 mb-6">
+              Articles, tutorials, and insights on software and technology. Simple, fast, and readable on every device.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up opacity-0 stagger-4">
-              <Button asChild size="lg" className="gradient-bg text-white hover:opacity-90 transition-opacity">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button asChild size="lg">
                 <Link to="/blog">
                   Explore Articles
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link to="/about">About Me</Link>
+                <Link to="/about">About</Link>
               </Button>
             </div>
           </div>
@@ -49,12 +39,12 @@ const Index = () => {
       </section>
 
       {/* Featured Posts */}
-      <section className="py-16 md:py-24 bg-muted/30">
+      <section className="py-12 md:py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h2 className="text-3xl md:text-4xl font-serif font-bold mb-2">Featured Posts</h2>
-              <p className="text-muted-foreground">Our most popular and trending articles</p>
+              <h2 className="text-2xl md:text-3xl font-semibold mb-1">Featured Posts</h2>
+              <p className="text-foreground/70">Our most popular and trending articles</p>
             </div>
             <Button asChild variant="ghost" className="hidden md:flex">
               <Link to="/blog">
@@ -64,21 +54,25 @@ const Index = () => {
             </Button>
           </div>
           
-          <div className="space-y-8">
-            {featuredPosts.slice(0, 2).map((post, idx) => (
-              <BlogCard key={post.slug} post={post} featured priority={idx === 0} />
-            ))}
-          </div>
+          {featuredPosts.length === 0 ? (
+            <p className="text-center text-foreground/60">No featured posts yet.</p>
+          ) : (
+            <div className="space-y-8">
+              {featuredPosts.slice(0, 2).map((post, idx) => (
+                <BlogCard key={post.slug} post={post} featured priority={idx === 0} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Recent Posts */}
-      <section className="py-16 md:py-24">
+      <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h2 className="text-3xl md:text-4xl font-serif font-bold mb-2">Recent Articles</h2>
-              <p className="text-muted-foreground">The latest from our blog</p>
+              <h2 className="text-2xl md:text-3xl font-semibold mb-1">Recent Articles</h2>
+              <p className="text-foreground/70">The latest from our blog</p>
             </div>
             <Button asChild variant="ghost" className="hidden md:flex">
               <Link to="/blog">
@@ -88,11 +82,15 @@ const Index = () => {
             </Button>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentPosts.map((post, idx) => (
-              <BlogCard key={post.slug} post={post} priority={idx === 0} />
-            ))}
-          </div>
+          {recentPosts.length === 0 ? (
+            <p className="text-center text-foreground/60">No articles yet. Please check back soon.</p>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {recentPosts.map((post, idx) => (
+                <BlogCard key={post.slug} post={post} priority={idx === 0} />
+              ))}
+            </div>
+          )}
 
           <div className="mt-8 text-center md:hidden">
             <Button asChild variant="outline">
