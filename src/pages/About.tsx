@@ -14,7 +14,7 @@ const About = () => {
     { icon: Twitter, href: "#", label: "Twitter" },
     { icon: Github, href: "#", label: "GitHub" },
     { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Mail, href: "mailto:hello@blogify.dev", label: "Email" },
+    { icon: Mail, href: "mailto:amrendra1999official@gmail.com", label: "Email" },
   ];
 
   return (
@@ -28,16 +28,16 @@ const About = () => {
                 About Me
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6">
-                Hi, I'm <span className="gradient-text">Sarah Chen</span>
+                Hi, I'm <span className="gradient-text">Amrendra Kumar</span>
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                I'm a full-stack developer and designer with over 8 years of experience 
-                building digital products. I write about web development, design systems, 
-                and creating great user experiences.
+                I'm a passionate full-stack developer and tech enthusiast with a deep love for 
+                building innovative web applications. I write about modern web development, 
+                emerging technologies, and creating exceptional user experiences.
               </p>
               <p className="text-lg text-muted-foreground mb-8">
-                When I'm not coding, you'll find me exploring new coffee shops, 
-                reading about technology, or contributing to open-source projects.
+                When I'm not coding, you'll find me exploring new technologies, 
+                contributing to open-source projects, or sharing my knowledge with the developer community.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button asChild className="gradient-bg">
@@ -56,7 +56,7 @@ const About = () => {
               <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20">
                 <img
                   src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=600&fit=crop"
-                  alt="Sarah Chen"
+                  alt="Amrendra Kumar"
                   className="w-full h-full object-cover"
                 />
               </div>
