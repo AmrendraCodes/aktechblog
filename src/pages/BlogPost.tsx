@@ -18,17 +18,63 @@ const calculateReadingTime = (content: string): { minutes: number; words: number
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
-  const post = slug ? getPostBySlug(slug) : null;
+  const [post, setPost] = useState<ReturnType<typeof mapSingleArticleToUi>>(null);
+  const [related, setRelated] = useState<ReturnType<typeof mapArticlesToUi>>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!post) {
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      if (!slug) {
+        if (mounted) setError("Slug not provided");
+        if (mounted) setLoading(false);
+        return;
+      }
+      try {
+        const json = await fetchArticleBySlug(slug);
+        const mapped = mapSingleArticleToUi(json);
+        if (mounted) setPost(mapped);
+        // Fetch related posts (same category, excluding current)
+        const allJson = await fetchArticles();
+        const allMapped = mapArticlesToUi(allJson);
+        const filtered = allMapped.filter(p => p.category === mapped?.category && p.slug !== slug).slice(0, 2);
+        if (mounted) setRelated(filtered);
+      } catch (e: any) {
+        if (mounted) setError(e?.message || "Failed to load article");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto">
+            <div className="animate-pulse space-y-6">
+              <div className="h-8 bg-gray-200 rounded w-1/3" />
+              <div className="h-12 bg-gray-200 rounded" />
+              <div className="h-64 bg-gray-200 rounded" />
+              <div className="space-y-3">
+                <div className="h-4 bg-gray-200 rounded" />
+                <div className="h-4 bg-gray-200 rounded w-5/6" />
+                <div className="h-4 bg-gray-200 rounded w-4/6" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !post) {
     return <Navigate to="/blog" replace />;
   }
 
   const { minutes, words } = calculateReadingTime(post.content);
-
-  const relatedPosts = blogPosts
-    .filter((p) => p.category === post.category && p.slug !== post.slug)
-    .slice(0, 2);
 
   // Simple markdown to HTML conversion
   const renderContent = (content: string) => {
@@ -104,15 +150,13 @@ const BlogPost = () => {
 
           {/* Article Header */}
           <header className="bg-card rounded-2xl p-6 md:p-10 card-shadow mb-8">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Badge className="bg-primary/10 text-primary hover:bg-primary/20">
+            <div className="flex flex-wrap gap-2 mb-6">
+              <Badge variant="secondary" className="bg-[#f0f0f0] text-black border-0">
                 {post.category}
               </Badge>
-              {post.tags.slice(0, 2).map((tag) => (
-                <Badge key={tag} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
+              <Badge variant="outline" className="bg-[#f0f0f0] text-black border-0">
+                {minutes} min read
+              </Badge>
             </div>
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6">
@@ -192,14 +236,14 @@ const BlogPost = () => {
       </article>
 
       {/* Related Posts */}
-      {relatedPosts.length > 0 && (
+      {related.length > 0 && (
         <section className="py-16 md:py-24 mt-12 bg-muted/30">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-serif font-bold mb-8 text-center">
               Related Articles
             </h2>
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {relatedPosts.map((relatedPost) => (
+              {related.map((relatedPost) => (
                 <BlogCard key={relatedPost.slug} post={relatedPost} />
               ))}
             </div>
