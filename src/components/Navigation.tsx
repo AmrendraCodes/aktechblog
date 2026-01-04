@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useNavigationState } from "@/hooks/useNavigationState";
 
 const Navigation = () => {
   const [isDark, setIsDark] = useState(false);
-  const { isMenuOpen, isDropdownOpen, toggleMenu, toggleDropdown, closeAll, isActive } = useNavigationState();
+  const { isMenuOpen, toggleMenu, closeAll, isActive } = useNavigationState();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -45,25 +45,6 @@ const Navigation = () => {
     }
   ];
 
-  const quickLinks = [
-    {
-      href: "/blog?category=Development",
-      label: "Development"
-    },
-    {
-      href: "/blog?category=Design",
-      label: "Design"
-    },
-    {
-      href: "/blog?category=Tutorial",
-      label: "Tutorials"
-    },
-    {
-      href: "/blog?category=News",
-      label: "News"
-    }
-  ];
-
   const handleLinkClick = (href: string) => {
     closeAll();
     navigate(href);
@@ -96,38 +77,6 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
-            
-            {/* Quick Links Dropdown */}
-            <div className="relative">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex items-center gap-1 text-sm font-medium"
-                onClick={toggleDropdown}
-                aria-expanded={isDropdownOpen}
-                aria-haspopup="true"
-              >
-                Quick Links
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-              
-              {isDropdownOpen && (
-                <div className="dropdown-content absolute top-full left-0 mt-1 w-48 animate-fade-in">
-                  <div className="py-2">
-                    {quickLinks.map(link => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        className="block px-4 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-accent transition-colors"
-                        onClick={() => toggleDropdown()}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
           </nav>
 
           {/* Right side actions */}
@@ -179,23 +128,6 @@ const Navigation = () => {
                   {link.label}
                 </Link>
               ))}
-              
-              {/* Mobile Quick Links */}
-              <div className="pt-4 mt-4 border-t border-border">
-                <h4 className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                  Quick Links
-                </h4>
-                {quickLinks.map(link => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    onClick={toggleMenu}
-                    className="block py-2 px-4 text-sm text-muted-foreground hover:text-primary hover:bg-accent transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
             </div>
           </nav>
         )}

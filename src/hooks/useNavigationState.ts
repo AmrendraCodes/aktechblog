@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 
 interface NavigationState {
   isMenuOpen: boolean;
-  isDropdownOpen: boolean;
   activePath: string;
 }
 
@@ -11,7 +10,6 @@ export const useNavigationState = () => {
   const location = useLocation();
   const [state, setState] = useState<NavigationState>({
     isMenuOpen: false,
-    isDropdownOpen: false,
     activePath: location.pathname,
   });
 
@@ -20,12 +18,11 @@ export const useNavigationState = () => {
     setState(prev => ({ ...prev, activePath: location.pathname }));
   }, [location.pathname]);
 
-  // Close menus when route changes
+  // Close menu when route changes
   useEffect(() => {
     setState(prev => ({
       ...prev,
       isMenuOpen: false,
-      isDropdownOpen: false,
     }));
   }, [location.pathname]);
 
@@ -33,15 +30,10 @@ export const useNavigationState = () => {
     setState(prev => ({ ...prev, isMenuOpen: !prev.isMenuOpen }));
   }, []);
 
-  const toggleDropdown = useCallback(() => {
-    setState(prev => ({ ...prev, isDropdownOpen: !prev.isDropdownOpen }));
-  }, []);
-
   const closeAll = useCallback(() => {
     setState(prev => ({
       ...prev,
       isMenuOpen: false,
-      isDropdownOpen: false,
     }));
   }, []);
 
@@ -49,17 +41,11 @@ export const useNavigationState = () => {
     setState(prev => ({ ...prev, isMenuOpen: true }));
   }, []);
 
-  const openDropdown = useCallback(() => {
-    setState(prev => ({ ...prev, isDropdownOpen: true }));
-  }, []);
-
   return {
     ...state,
     toggleMenu,
-    toggleDropdown,
     closeAll,
     openMenu,
-    openDropdown,
     isActive: (path: string) => state.activePath === path,
   };
 };
