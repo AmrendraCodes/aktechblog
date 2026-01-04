@@ -9,9 +9,9 @@ import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import { fetchArticles, mapArticlesToUi } from "@/lib/strapi";
 
 const Index = () => {
-  const [items, setItems] = useState([] as ReturnType<typeof mapArticlesToUi>);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     let mounted = true;
@@ -20,7 +20,7 @@ const Index = () => {
         const json = await fetchArticles();
         const mapped = mapArticlesToUi(json);
         if (mounted) setItems(mapped);
-      } catch (e: any) {
+      } catch (e) {
         if (mounted) setError(e?.message || "Failed to load articles");
       } finally {
         if (mounted) setLoading(false);
@@ -36,18 +36,16 @@ const Index = () => {
     <Layout>
       <PerformanceMonitor />
       
-      {/* Hero Section - Clean Simple Design */}
-      <section className="min-h-screen flex items-center justify-center bg-white">
+      {/* Hero Section - Ultra Simple */}
+      <section className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-6 py-3 rounded-full text-sm font-medium">
               <Sparkles className="h-4 w-4" />
               <span>Welcome to AK Tech Blog</span>
               <TrendingUp className="h-4 w-4" />
             </div>
             
-            {/* Main Content */}
             <div className="space-y-6">
               <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
                 Discover Amazing
@@ -59,7 +57,6 @@ const Index = () => {
               </p>
             </div>
             
-            {/* Stats */}
             <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold text-blue-600">100+</div>
@@ -75,7 +72,6 @@ const Index = () => {
               </div>
             </div>
             
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button asChild size="lg" className="px-8 py-6 text-lg bg-blue-600 hover:bg-blue-700 text-white">
                 <Link to="/blog" className="flex items-center gap-2">
@@ -97,7 +93,7 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Our Blog?</h2>
@@ -107,7 +103,7 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow">
+            <div className="text-center p-8 rounded-2xl bg-white shadow-lg">
               <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Zap className="h-8 w-8 text-white" />
               </div>
@@ -115,7 +111,7 @@ const Index = () => {
               <p className="text-gray-600">Stay updated with the latest trends and technologies in software development.</p>
             </div>
             
-            <div className="text-center p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow">
+            <div className="text-center p-8 rounded-2xl bg-white shadow-lg">
               <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <BookOpen className="h-8 w-8 text-white" />
               </div>
@@ -123,7 +119,7 @@ const Index = () => {
               <p className="text-gray-600">Comprehensive guides and tutorials with real-world examples and best practices.</p>
             </div>
             
-            <div className="text-center p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow">
+            <div className="text-center p-8 rounded-2xl bg-white shadow-lg">
               <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="h-8 w-8 text-white" />
               </div>
@@ -135,7 +131,7 @@ const Index = () => {
       </section>
 
       {/* Featured Posts */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
             <div className="space-y-4">
@@ -181,7 +177,7 @@ const Index = () => {
       </section>
 
       {/* Recent Posts */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
             <div className="space-y-4">
