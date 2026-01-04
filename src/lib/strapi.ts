@@ -39,18 +39,33 @@ export type UiPost = {
 
 export function mapArticlesToUi(data: any): UiPost[] {
   const base = getStrapiBase();
+  const toAbsolute = (url: string | undefined): string => {
+    if (!url) return '';
+    if (/^https?:\/\//i.test(url)) return url;
+    return `${base}${url}`;
+  };
   const items = Array.isArray(data?.data) ? data.data : [];
   return items.map((it: any) => {
     const a = it?.attributes || {};
-    const cover = a?.cover?.data?.attributes?.url || '';
+    const cover =
+      a?.cover?.data?.attributes?.url ||
+      a?.image?.data?.attributes?.url ||
+      a?.cover?.url ||
+      a?.image?.url ||
+      '';
+    const categoryName =
+      a?.category?.data?.attributes?.name ||
+      a?.category ||
+      (Array.isArray(a?.categories?.data) && a.categories.data[0]?.attributes?.name) ||
+      'General';
     return {
       id: it?.id,
       title: a?.title || a?.name || 'Untitled',
       excerpt: a?.description || a?.excerpt || '',
-      image: cover ? `${base}${cover}` : '',
+      image: toAbsolute(cover),
       date: a?.publishedAt || a?.createdAt || new Date().toISOString(),
       readTime: a?.readTime || '5 min',
-      category: a?.category || 'General',
+      category: categoryName,
       slug: a?.slug || String(it?.id || ''),
     };
   });
