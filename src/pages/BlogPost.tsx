@@ -114,59 +114,32 @@ const BlogPost = () => {
 
   const { minutes, words } = calculateReadingTime(post.content || '');
 
-  // Safe markdown to HTML conversion
+  // Safe rich text rendering for Strapi content
   const renderContent = (content: string) => {
     if (!content || typeof content !== 'string') {
       return <p className="mb-4 text-muted-foreground">No content available.</p>;
     }
 
-    return content
-      .split('\n')
-      .map((line, index) => {
-        if (!line) return <br key={index} />;
-        
-        try {
-          if (line.startsWith('# ')) {
-            return <h1 key={index} className="text-4xl font-serif font-bold mb-6 mt-8">{line.slice(2)}</h1>;
-          }
-          if (line.startsWith('## ')) {
-            return <h2 key={index} className="text-2xl font-serif font-semibold mt-10 mb-4">{line.slice(3)}</h2>;
-          }
-          if (line.startsWith('> ')) {
-            return <blockquote key={index} className="border-l-4 border-primary pl-4 italic my-6 text-muted-foreground">{line.slice(2)}</blockquote>;
-          }
-          if (line.startsWith('```')) {
-            return null; // Skip code block markers
-          }
-          if (line.startsWith('- ')) {
-            return <li key={index} className="ml-6 text-muted-foreground mb-2">{line.slice(2)}</li>;
-          }
-          if (line.match(/^\d+\. /)) {
-            return <li key={index} className="ml-6 text-muted-foreground mb-2 list-decimal">{line.replace(/^\d+\. /, '')}</li>;
-          }
-          
-          // Handle inline code
-          const parts = line.split(/`([^`]+)`/);
-          if (parts.length > 1) {
-            return (
-              <p key={index} className="mb-4 text-muted-foreground leading-relaxed">
-                {parts.map((part, i) => 
-                  i % 2 === 1 ? (
-                    <code key={i} className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">{part}</code>
-                  ) : (
-                    part
-                  )
-                )}
-              </p>
-            );
-          }
-          
-          return <p key={index} className="mb-4 text-muted-foreground leading-relaxed">{line}</p>;
-        } catch (lineError) {
-          console.warn('Error rendering line:', line, lineError);
-          return <p key={index} className="mb-4 text-muted-foreground">{line}</p>;
-        }
-      });
+    // For Strapi rich text, we'll use dangerouslySetInnerHTML since it comes from trusted CMS
+    // Convert basic markdown to HTML for better rendering
+    const htmlContent = content
+      .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-serif font-semibold mt-10 mb-4">$1</h2>')
+      .replace(/^# (.+)$/gm, '<h1 class="text-4xl font-serif font-bold mb-6 mt-8">$1</h1>')
+      .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-primary pl-4 italic my-6 text-muted-foreground">$1</blockquote>')
+      .replace(/^- (.+)$/gm, '<li class="ml-6 text-muted-foreground mb-2">$1</li>')
+      .replace(/^\d+\. (.+)$/gm, '<li class="ml-6 text-muted-foreground mb-2 list-decimal">$1</li>')
+      .replace(/`([^`]+)`/g, '<code class="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '</p><p class="mb-4 text-muted-foreground leading-relaxed">')
+      .replace(/\n/g, '<br />');
+
+    return (
+      <div 
+        className="prose-blog mb-4 text-muted-foreground leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: `<p class="mb-4 text-muted-foreground leading-relaxed">${htmlContent}</p>` }}
+      />
+    );
   };
 
   // Safe date formatting

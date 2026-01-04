@@ -43,11 +43,14 @@ export function mapArticlesToUi(data: any): UiPost[] {
     if (/^https?:\/\//i.test(url)) return url;
     return `${base}${url}`;
   };
+  
   // Support both nested and flat structures
   const items = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
   return items.map((it: any) => {
     // Support both nested and flat attribute structures
     const a = it?.attributes || it;
+    
+    // Handle image URL - Strapi provides full URLs in the nested structure
     const cover =
       a?.cover?.data?.attributes?.url ||
       a?.image?.data?.attributes?.url ||
@@ -56,16 +59,23 @@ export function mapArticlesToUi(data: any): UiPost[] {
       a?.cover ||
       a?.image ||
       '';
+    
+    // Extract content from blocks array for rich text
+    const content = a?.blocks?.filter((block: any) => block.__component === 'shared.rich-text')
+      .map((block: any) => block.body || '')
+      .join('\n\n') || a?.content || '';
+    
     const categoryName =
       a?.category?.data?.attributes?.name ||
       a?.category ||
       (Array.isArray(a?.categories?.data) && a.categories.data[0]?.attributes?.name) ||
       (Array.isArray(a?.categories) && a.categories[0]?.name) ||
       'General';
+      
     return {
       id: it?.id || a?.id,
       title: a?.title || a?.name || 'Untitled',
-      excerpt: a?.description || a?.excerpt || a?.content?.slice(0, 150) || '',
+      excerpt: a?.description || a?.excerpt || content.slice(0, 150) || '',
       image: toAbsolute(cover),
       date: a?.publishedAt || a?.createdAt || new Date().toISOString(),
       readTime: a?.readTime || '5 min',
@@ -85,6 +95,8 @@ export function mapSingleArticleToUi(data: any): UiPostDetail | null {
   const item = Array.isArray(data?.data) ? data.data[0] : data?.data || data;
   if (!item) return null;
   const a = item?.attributes || item;
+  
+  // Handle image URL - Strapi provides full URLs in the nested structure
   const cover =
     a?.cover?.data?.attributes?.url ||
     a?.image?.data?.attributes?.url ||
@@ -93,27 +105,35 @@ export function mapSingleArticleToUi(data: any): UiPostDetail | null {
     a?.cover ||
     a?.image ||
     '';
+    
+  // Extract content from blocks array for rich text
+  const content = a?.blocks?.filter((block: any) => block.__component === 'shared.rich-text')
+    .map((block: any) => block.body || '')
+    .join('\n\n') || a?.content || '';
+    
   const authorName =
     a?.author?.data?.attributes?.name ||
     a?.author?.name ||
     a?.author ||
-    'Author';
+    'Amrendra Kumar';
+    
   const category =
     a?.category?.data?.attributes?.name ||
     a?.category ||
     (Array.isArray(a?.categories?.data) && a.categories.data[0]?.attributes?.name) ||
     (Array.isArray(a?.categories) && a.categories[0]?.name) ||
     'General';
+    
   return {
     id: item?.id || a?.id,
     title: a?.title || 'Untitled',
-    excerpt: a?.description || a?.excerpt || '',
+    excerpt: a?.description || a?.excerpt || content.slice(0, 150) || '',
     image: cover ? (/^https?:\/\//i.test(cover) ? cover : `${base}${cover}`) : '',
     date: a?.publishedAt || a?.createdAt || new Date().toISOString(),
     readTime: a?.readTime || '5 min',
     category,
     slug: a?.slug || String(item?.id || a?.id || ''),
-    content: a?.content || '',
+    content: content,
     author: authorName,
   };
 }
