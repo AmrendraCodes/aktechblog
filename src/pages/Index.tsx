@@ -36,27 +36,20 @@ const Index = () => {
     <Layout>
       <PerformanceMonitor />
       
-      {/* Hero Section - Interactive Modern Design */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-blue-200 rounded-full blur-3xl opacity-20 animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-40 h-40 bg-purple-200 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-indigo-200 rounded-full blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '2s' }} />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-5xl mx-auto text-center space-y-8">
+      {/* Hero Section - Clean Simple Design */}
+      <section className="min-h-screen flex items-center justify-center bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm text-blue-600 px-6 py-3 rounded-full text-sm font-medium border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <Sparkles className="h-4 w-4 animate-spin" style={{ animationDuration: '3s' }} />
+            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-6 py-3 rounded-full text-sm font-medium">
+              <Sparkles className="h-4 w-4" />
               <span>Welcome to AK Tech Blog</span>
               <TrendingUp className="h-4 w-4" />
             </div>
             
             {/* Main Content */}
             <div className="space-y-6">
-              <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight">
+              <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
                 Discover Amazing
                 <br />
                 Tech Content
@@ -68,34 +61,34 @@ const Index = () => {
             
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
-              <div className="text-center group">
-                <div className="text-3xl font-bold text-blue-600 group-hover:scale-110 transition-transform">100+</div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600">100+</div>
                 <div className="text-sm text-gray-600">Articles</div>
               </div>
-              <div className="text-center group">
-                <div className="text-3xl font-bold text-purple-600 group-hover:scale-110 transition-transform">50K+</div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600">50K+</div>
                 <div className="text-sm text-gray-600">Readers</div>
               </div>
-              <div className="text-center group">
-                <div className="text-3xl font-bold text-indigo-600 group-hover:scale-110 transition-transform">24/7</div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-indigo-600">24/7</div>
                 <div className="text-sm text-gray-600">Updates</div>
               </div>
             </div>
             
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button asChild size="lg" className="px-8 py-6 text-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <Button asChild size="lg" className="px-8 py-6 text-lg bg-blue-600 hover:bg-blue-700 text-white">
                 <Link to="/blog" className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 group-hover:rotate-12 transition-transform" />
+                  <BookOpen className="h-5 w-5" />
                   Explore Articles
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="px-8 py-6 text-lg border-2 hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 hover:scale-105 group">
+              <Button asChild variant="outline" size="lg" className="px-8 py-6 text-lg border-2 border-gray-300 hover:bg-gray-50">
                 <Link to="/about" className="flex items-center gap-2">
-                  <Users className="h-5 w-5 group-hover:rotate-12 transition-transform" />
+                  <Users className="h-5 w-5" />
                   About Us
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-5 w-5" />
                 </Link>
               </Button>
             </div>
@@ -104,7 +97,7 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Our Blog?</h2>
@@ -114,24 +107,24 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 hover:shadow-xl transition-all duration-300 hover:scale-105 group">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform">
+            <div className="text-center p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow">
+              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Zap className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Latest Tech</h3>
               <p className="text-gray-600">Stay updated with the latest trends and technologies in software development.</p>
             </div>
             
-            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 hover:shadow-xl transition-all duration-300 hover:scale-105 group">
-              <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform">
+            <div className="text-center p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow">
+              <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <BookOpen className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">In-Depth Tutorials</h3>
               <p className="text-gray-600">Comprehensive guides and tutorials with real-world examples and best practices.</p>
             </div>
             
-            <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 hover:shadow-xl transition-all duration-300 hover:scale-105 group">
-              <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:rotate-12 transition-transform">
+            <div className="text-center p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-shadow">
+              <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Community Driven</h3>
@@ -142,7 +135,7 @@ const Index = () => {
       </section>
 
       {/* Featured Posts */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
             <div className="space-y-4">
@@ -188,7 +181,7 @@ const Index = () => {
       </section>
 
       {/* Recent Posts */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
             <div className="space-y-4">
@@ -232,7 +225,7 @@ const Index = () => {
           )}
 
           <div className="mt-16 text-center lg:hidden">
-            <Button asChild variant="outline" size="lg" className="px-8 py-6 text-lg border-2 hover:bg-purple-50">
+            <Button asChild variant="outline" size="lg" className="px-8 py-6 text-lg border-2 border-gray-300 hover:bg-gray-50">
               <Link to="/blog" className="flex items-center gap-2">
                 View All Articles
                 <ArrowRight className="h-5 w-5" />
@@ -243,7 +236,7 @@ const Index = () => {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+      <section className="py-20 bg-blue-50">
         <div className="container mx-auto px-4">
           <DynamicNewsletter />
         </div>
