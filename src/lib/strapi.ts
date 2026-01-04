@@ -44,29 +44,34 @@ export function mapArticlesToUi(data: any): UiPost[] {
     if (/^https?:\/\//i.test(url)) return url;
     return `${base}${url}`;
   };
-  const items = Array.isArray(data?.data) ? data.data : [];
+  // Support both nested and flat structures
+  const items = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
   return items.map((it: any) => {
-    const a = it?.attributes || {};
+    // Support both nested and flat attribute structures
+    const a = it?.attributes || it;
     const cover =
       a?.cover?.data?.attributes?.url ||
       a?.image?.data?.attributes?.url ||
       a?.cover?.url ||
       a?.image?.url ||
+      a?.cover ||
+      a?.image ||
       '';
     const categoryName =
       a?.category?.data?.attributes?.name ||
       a?.category ||
       (Array.isArray(a?.categories?.data) && a.categories.data[0]?.attributes?.name) ||
+      (Array.isArray(a?.categories) && a.categories[0]?.name) ||
       'General';
     return {
-      id: it?.id,
+      id: it?.id || a?.id,
       title: a?.title || a?.name || 'Untitled',
-      excerpt: a?.description || a?.excerpt || '',
+      excerpt: a?.description || a?.excerpt || a?.content?.slice(0, 150) || '',
       image: toAbsolute(cover),
       date: a?.publishedAt || a?.createdAt || new Date().toISOString(),
       readTime: a?.readTime || '5 min',
       category: categoryName,
-      slug: a?.slug || String(it?.id || ''),
+      slug: a?.slug || String(it?.id || a?.id || ''),
     };
   });
 }
@@ -78,21 +83,37 @@ export type UiPostDetail = UiPost & {
 
 export function mapSingleArticleToUi(data: any): UiPostDetail | null {
   const base = getStrapiBase();
-  const item = Array.isArray(data?.data) ? data.data[0] : data?.data;
+  const item = Array.isArray(data?.data) ? data.data[0] : data?.data || data;
   if (!item) return null;
-  const a = item?.attributes || {};
-  const cover = a?.cover?.data?.attributes?.url || a?.image?.data?.attributes?.url || '';
-  const authorName = a?.author?.data?.attributes?.name || a?.author || 'Author';
-  const category = a?.category?.data?.attributes?.name || a?.category || 'General';
+  const a = item?.attributes || item;
+  const cover =
+    a?.cover?.data?.attributes?.url ||
+    a?.image?.data?.attributes?.url ||
+    a?.cover?.url ||
+    a?.image?.url ||
+    a?.cover ||
+    a?.image ||
+    '';
+  const authorName =
+    a?.author?.data?.attributes?.name ||
+    a?.author?.name ||
+    a?.author ||
+    'Author';
+  const category =
+    a?.category?.data?.attributes?.name ||
+    a?.category ||
+    (Array.isArray(a?.categories?.data) && a.categories.data[0]?.attributes?.name) ||
+    (Array.isArray(a?.categories) && a.categories[0]?.name) ||
+    'General';
   return {
-    id: item?.id,
+    id: item?.id || a?.id,
     title: a?.title || 'Untitled',
     excerpt: a?.description || a?.excerpt || '',
-    image: cover ? `${base}${cover}` : '',
+    image: cover ? (/^https?:\/\//i.test(cover) ? cover : `${base}${cover}`) : '',
     date: a?.publishedAt || a?.createdAt || new Date().toISOString(),
     readTime: a?.readTime || '5 min',
     category,
-    slug: a?.slug || String(item?.id || ''),
+    slug: a?.slug || String(item?.id || a?.id || ''),
     content: a?.content || '',
     author: authorName,
   };

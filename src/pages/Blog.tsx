@@ -18,17 +18,7 @@ const Blog = () => {
     (async () => {
       try {
         const json = await fetchArticles(); // uses populate=*
-        console.log("Raw Strapi response:", json);
         const mapped = mapArticlesToUi(json);
-        console.log("Mapped UI posts:", mapped);
-        // Debug first item structure
-        if (json?.data?.[0]) {
-          console.log("First raw item:", json.data[0]);
-          console.log("First raw attributes:", json.data[0]?.attributes);
-        }
-        if (mapped?.[0]) {
-          console.log("First mapped item:", mapped[0]);
-        }
         if (mounted) setItems(mapped);
       } catch (e: any) {
         if (mounted) setError(e?.message || "Failed to load articles");
