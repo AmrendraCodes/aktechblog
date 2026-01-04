@@ -1,14 +1,35 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import BlogCard from "@/components/BlogCard";
 import Newsletter from "@/components/Newsletter";
-import { getFeaturedPosts, blogPosts } from "@/data/blogPosts";
+import { fetchArticles, mapArticlesToUi } from "@/lib/strapi";
 
 const Index = () => {
-  const featuredPosts = getFeaturedPosts();
-  const recentPosts = blogPosts.slice(0, 3);
+  const [items, setItems] = useState([] as ReturnType<typeof mapArticlesToUi>);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const json = await fetchArticles(); // populate=*
+        const mapped = mapArticlesToUi(json);
+        if (mounted) setItems(mapped);
+      } catch (e: any) {
+        if (mounted) setError(e?.message || "Failed to load articles");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  const featuredPosts = items.slice(0, 2);
+  const recentPosts = items.slice(0, 6);
 
   return (
     <Layout>
@@ -54,7 +75,15 @@ const Index = () => {
             </Button>
           </div>
           
-          {featuredPosts.length === 0 ? (
+          {loading ? (
+            <div className="grid gap-6 md:grid-cols-2">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="rounded-xl card-shadow bg-white p-6 skeleton" style={{height: 220}} />
+              ))}
+            </div>
+          ) : error ? (
+            <p className="text-center text-foreground/60">{error}</p>
+          ) : featuredPosts.length === 0 ? (
             <p className="text-center text-foreground/60">No featured posts yet.</p>
           ) : (
             <div className="space-y-8">
@@ -82,7 +111,15 @@ const Index = () => {
             </Button>
           </div>
           
-          {recentPosts.length === 0 ? (
+          {loading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="rounded-xl card-shadow bg-white p-6 skeleton" style={{height: 280}} />
+              ))}
+            </div>
+          ) : error ? (
+            <div className="text-center text-foreground/60">{error}</div>
+          ) : recentPosts.length === 0 ? (
             <p className="text-center text-foreground/60">No articles yet. Please check back soon.</p>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

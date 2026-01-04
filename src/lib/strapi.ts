@@ -55,3 +55,30 @@ export function mapArticlesToUi(data: any): UiPost[] {
     };
   });
 }
+
+export type UiPostDetail = UiPost & {
+  content: string;
+  author: string;
+};
+
+export function mapSingleArticleToUi(data: any): UiPostDetail | null {
+  const base = getStrapiBase();
+  const item = Array.isArray(data?.data) ? data.data[0] : data?.data;
+  if (!item) return null;
+  const a = item?.attributes || {};
+  const cover = a?.cover?.data?.attributes?.url || a?.image?.data?.attributes?.url || '';
+  const authorName = a?.author?.data?.attributes?.name || a?.author || 'Author';
+  const category = a?.category?.data?.attributes?.name || a?.category || 'General';
+  return {
+    id: item?.id,
+    title: a?.title || 'Untitled',
+    excerpt: a?.description || a?.excerpt || '',
+    image: cover ? `${base}${cover}` : '',
+    date: a?.publishedAt || a?.createdAt || new Date().toISOString(),
+    readTime: a?.readTime || '5 min',
+    category,
+    slug: a?.slug || String(item?.id || ''),
+    content: a?.content || '',
+    author: authorName,
+  };
+}
