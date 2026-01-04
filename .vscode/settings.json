@@ -1,0 +1,27 @@
+{
+  "css.validate": false,
+  "css.lint.unknownAtRules": "ignore",
+  "css.lint.validProperties": "ignore",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.includeLanguages": [
+    "html",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "svelte"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    "clsx\\(([^)]*\\))",
+    "cn\\(([^)]*\\))"
+  ],
+  "tailwindCSS.experimental.configFile": {
+    "tailwind.config.js": "tailwind.config.ts"
+  }
+}
