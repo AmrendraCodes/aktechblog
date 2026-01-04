@@ -80,7 +80,6 @@ export default defineConfig((env: ConfigEnv) => {
         },
         // Additional rollup optimizations
         treeshake: 'smallest',
-        compact: true,
       },
       // Enable CSS code splitting and optimization
       cssCodeSplit: true,
