@@ -160,7 +160,13 @@ const Index = () => {
             </div>
           ) : error ? (
             <div className="text-center py-20">
-              <p className="text-xl text-gray-400">{error}</p>
+              <p className="text-xl text-gray-400">Unable to load articles. Please refresh the page.</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="mt-4 px-6 py-3 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors"
+              >
+                Refresh Page
+              </button>
             </div>
           ) : featuredPosts.length === 0 ? (
             <div className="text-center py-20">
