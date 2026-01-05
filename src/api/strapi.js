@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { smartApi } from './smartApi';
 
-// Strapi API configuration - Using Vercel proxy to avoid SSL issues
-const STRAPI_URL = ''; // Empty since we're using proxy
+// Strapi API configuration - Smart routing
+const STRAPI_URL = ''; // Empty since we're using smart API
 const API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN;
 
 // Create axios instance with optimized configuration
@@ -14,10 +15,10 @@ const strapiApi = axios.create({
   }
 });
 
-// Optimized API endpoints - Using Vercel proxy
+// Optimized API endpoints - Using smart routing
 export const strapiEndpoints = {
   articles: {
-    // Fetch articles through Vercel proxy (server-to-server to Strapi)
+    // Fetch articles through smart API (auto-detects environment)
     getArticles: (page = 1, pageSize = 6) => {
       const params = new URLSearchParams({
         'fields[0]': 'title',
@@ -33,7 +34,7 @@ export const strapiEndpoints = {
       return `/api/articles?${params.toString()}`;
     },
     
-    // Get single article by slug through proxy
+    // Get single article by slug through smart API
     getArticleBySlug: (slug) => {
       const params = new URLSearchParams({
         'filters[slug][$eq]': slug,
@@ -51,39 +52,55 @@ export const strapiEndpoints = {
 
 // API service functions
 export const strapiService = {
-  // Fetch articles with pagination through proxy
+  // Fetch articles with pagination through smart API
   async fetchArticles(page = 1, pageSize = 6) {
     try {
-      console.log('Fetching articles through proxy:', `/api/articles?page=${page}&pageSize=${pageSize}`);
-      const response = await strapiApi.get(strapiEndpoints.articles.getArticles(page, pageSize));
-      console.log('Proxy API Response:', response.data);
-      return response.data;
+      console.log('🔄 Fetching articles through smart API...');
+      const response = await smartApi.getArticles(page, pageSize);
+      console.log('✅ Smart API Response:', response);
+      return response;
     } catch (error) {
-      console.error('Error fetching articles through proxy:', error);
+      console.error('❌ Error fetching articles through smart API:', error);
       throw error;
     }
   },
 
-  // Fetch single article by slug through proxy
+  // Fetch single article by slug through smart API
   async fetchArticleBySlug(slug) {
     try {
-      console.log('Fetching article by slug through proxy:', slug);
-      const response = await strapiApi.get(strapiEndpoints.articles.getArticleBySlug(slug));
-      console.log('Article Proxy Response:', response.data);
-      return response.data;
+      console.log('🔄 Fetching article by slug through smart API:', slug);
+      const response = await smartApi.getArticles(); // For now, get all and filter
+      console.log('✅ Article Smart API Response:', response);
+      
+      // Filter by slug
+      const article = response.data?.find(article => article.slug === slug);
+      if (article) {
+        return {
+          data: [article],
+          meta: response.meta
+        };
+      }
+      
+      throw new Error('Article not found');
     } catch (error) {
-      console.error('Error fetching article through proxy:', error);
+      console.error('❌ Error fetching article through smart API:', error);
       throw error;
     }
   },
 
-  // Get total articles count through proxy
+  // Get total articles count through smart API
   async getArticlesCount() {
     try {
-      const response = await strapiApi.get('/api/articles/count');
-      return response.data;
+      const response = await smartApi.getArticles();
+      return {
+        data: {
+          attributes: {
+            count: response.meta?.pagination?.total || 0
+          }
+        }
+      };
     } catch (error) {
-      console.error('Error fetching articles count through proxy:', error);
+      console.error('❌ Error fetching articles count through smart API:', error);
       throw error;
     }
   }
@@ -103,13 +120,13 @@ export const transformArticle = (article) => {
     category: 'Technology', // Default category since API doesn't provide it
     publishedAt: article.publishedAt || new Date().toISOString(),
     cover: {
-      url: null, // No cover image in your API response
+      url: article.image || null, // Use image from API
       alternativeText: article.title || 'Article image'
     },
     seo: null,
     
     // BlogCard component expects these fields
-    image: null, // No image in your API response
+    image: article.image || null, // Use image from API
     date: article.publishedAt || new Date().toISOString(),
     readTime: '3 min read', // Default reading time
     imageData: null // For debugging

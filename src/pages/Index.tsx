@@ -7,10 +7,6 @@ import { LazyBlogCard } from "../components/LazyBlogCard";
 import { DynamicNewsletter } from "../components/DynamicNewsletter";
 import { PerformanceMonitor } from "../components/PerformanceMonitor";
 import { useArticles } from "../hooks/useArticles";
-import ApiTest from "../components/ApiTest";
-import SimpleTest from "../components/SimpleTest";
-import BasicTest from "../components/BasicTest";
-import DirectTest from "../components/DirectTest";
 
 const Index = () => {
   // Use optimized React Query hook
@@ -29,18 +25,6 @@ const Index = () => {
   return (
     <Layout>
       <PerformanceMonitor />
-      
-      {/* Direct Test Component - Most basic test */}
-      <DirectTest />
-      
-      {/* Basic Test Component - Simple API test */}
-      <BasicTest />
-      
-      {/* Simple Test Component - Auto API test */}
-      <SimpleTest />
-      
-      {/* API Test Component - Temporarily added for debugging */}
-      <ApiTest />
       
       {/* Hero Section - Professional Tech Blog */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
