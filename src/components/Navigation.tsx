@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,6 @@ const Navigation = () => {
   const [isDark, setIsDark] = useState(false);
   const { isMenuOpen, toggleMenu, closeAll, isActive } = useNavigationState();
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const isDarkMode = localStorage.getItem("darkMode") === "true";
@@ -44,11 +43,6 @@ const Navigation = () => {
       label: "Contact"
     }
   ];
-
-  const handleLinkClick = (href: string) => {
-    closeAll();
-    navigate(href);
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

@@ -1,11 +1,12 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Calendar, Clock, User, Share2, Twitter, Linkedin, BookOpen } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, User, Share2, Twitter, Linkedin, BookOpen, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Layout from "@/components/Layout";
 import BlogCard from "@/components/BlogCard";
 import ReadingProgress from "@/components/ReadingProgress";
+import Breadcrumb from "@/components/Breadcrumb";
 import { fetchArticleBySlug, mapSingleArticleToUi, mapArticlesToUi, fetchArticles } from "@/lib/strapi";
 
 // Calculate reading time based on content
@@ -179,6 +180,9 @@ const BlogPost = () => {
 
       <article className="container mx-auto px-4 -mt-32 relative z-10">
         <div className="max-w-3xl mx-auto">
+          {/* Breadcrumb Navigation */}
+          <Breadcrumb currentPage={post.title || 'Untitled Article'} />
+
           {/* Back button */}
           <Button asChild variant="ghost" className="mb-6 bg-background/80 backdrop-blur">
             <Link to="/blog">

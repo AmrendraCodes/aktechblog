@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
-import { Search } from "lucide-react";
+import { Search, Home, Users, Mail, Shield, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { LazyBlogCard } from "@/components/LazyBlogCard";
 import { fetchArticles, mapArticlesToUi } from "@/lib/strapi";
@@ -126,6 +127,58 @@ const Blog = () => {
               </Button>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Quick Links Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-serif font-bold text-center mb-12">
+              Explore More
+            </h2>
+            <div className="grid md:grid-cols-4 gap-6">
+              <Link to="/" className="group">
+                <div className="bg-card rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <Home className="h-8 w-8 mx-auto mb-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold mb-2">Home</h3>
+                  <p className="text-sm text-muted-foreground">Return to homepage</p>
+                </div>
+              </Link>
+
+              <Link to="/about" className="group">
+                <div className="bg-card rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <Users className="h-8 w-8 mx-auto mb-4 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold mb-2">About</h3>
+                  <p className="text-sm text-muted-foreground">Learn about us</p>
+                </div>
+              </Link>
+
+              <Link to="/blog" className="group">
+                <div className="bg-card rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <FileText className="h-8 w-8 mx-auto mb-4 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold mb-2">Blog</h3>
+                  <p className="text-sm text-muted-foreground">Read our articles</p>
+                </div>
+              </Link>
+
+              <Link to="/contact" className="group">
+                <div className="bg-card rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <Mail className="h-8 w-8 mx-auto mb-4 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold mb-2">Contact</h3>
+                  <p className="text-sm text-muted-foreground">Get in touch</p>
+                </div>
+              </Link>
+
+              <Link to="/privacy-policy" className="group">
+                <div className="bg-card rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  <Shield className="h-8 w-8 mx-auto mb-4 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-semibold mb-2">Privacy</h3>
+                  <p className="text-sm text-muted-foreground">Privacy policy</p>
+                </div>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </Layout>

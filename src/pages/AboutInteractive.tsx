@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code, Palette, Lightbulb, Sun, Moon, ArrowRight, Calendar, Briefcase, BookOpen, Award } from "lucide-react";
+import { Code, Palette, Lightbulb, Sun, Moon, ArrowRight, Calendar, Briefcase, BookOpen, Award, Home, FileText, Mail, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 
 const AboutInteractive = () => {
@@ -167,14 +168,15 @@ const AboutInteractive = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <Button
-                onClick={scrollToJourney}
-                size="lg"
-                className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg"
-              >
-                Explore My Journey
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link to="/blog">
+                <Button
+                  size="lg"
+                  className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg"
+                >
+                  Explore My Journey
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
         </div>
@@ -311,6 +313,67 @@ const AboutInteractive = () => {
                 </motion.div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Links Section */}
+      <section className="py-16 bg-muted/30 px-4">
+        <div className="max-w-6xl mx-auto">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200"
+          >
+            Explore More
+          </motion.h2>
+
+          <div className="grid md:grid-cols-4 gap-6">
+            <Link to="/" className="group">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <Home className="h-8 w-8 mx-auto mb-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform" />
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Home</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Return to homepage</p>
+              </motion.div>
+            </Link>
+
+            <Link to="/blog" className="group">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <FileText className="h-8 w-8 mx-auto mb-4 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform" />
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Blog</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Read my articles</p>
+              </motion.div>
+            </Link>
+
+            <Link to="/contact" className="group">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <Mail className="h-8 w-8 mx-auto mb-4 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform" />
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Contact</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Get in touch</p>
+              </motion.div>
+            </Link>
+
+            <Link to="/privacy-policy" className="group">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <Users className="h-8 w-8 mx-auto mb-4 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform" />
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Privacy</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Privacy policy</p>
+              </motion.div>
+            </Link>
           </div>
         </div>
       </section>

@@ -9,6 +9,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import AboutInteractive from "./pages/AboutInteractive";
 import Contact from "./pages/Contact";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/about" element={<AboutInteractive />} />
             <Route path="/about-interactive" element={<AboutInteractive />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
