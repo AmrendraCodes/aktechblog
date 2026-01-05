@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Strapi API configuration
-const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337';
+// Strapi API configuration - Using your actual backend URL
+const STRAPI_URL = 'https://genuine-fun-a6ecdb902.strapiapp.com';
 const API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN;
 
 // Create axios instance with optimized configuration
@@ -17,14 +17,13 @@ const strapiApi = axios.create({
 // Optimized API endpoints
 export const strapiEndpoints = {
   articles: {
-    // Fetch articles with ONLY required fields
+    // Fetch articles with ONLY required fields (no attributes wrapper)
     getArticles: (page = 1, pageSize = 6) => {
       const params = new URLSearchParams({
         'fields[0]': 'title',
         'fields[1]': 'slug', 
-        'fields[2]': 'publishedAt',
-        'populate[cover][fields][0]': 'url',
-        'populate[cover][fields][1]': 'alternativeText',
+        'fields[2]': 'description',
+        'fields[3]': 'publishedAt',
         'sort[0]': 'publishedAt:desc',
         'pagination[page]': page.toString(),
         'pagination[pageSize]': pageSize.toString(),
@@ -40,16 +39,9 @@ export const strapiEndpoints = {
         'filters[slug][$eq]': slug,
         'fields[0]': 'title',
         'fields[1]': 'slug',
-        'fields[2]': 'content',
+        'fields[2]': 'description',
         'fields[3]': 'publishedAt',
-        'fields[4]': 'excerpt',
-        'fields[5]': 'category',
-        'populate[cover][fields][0]': 'url',
-        'populate[cover][fields][1]': 'alternativeText',
-        'populate[seo][fields][0]': 'metaTitle',
-        'populate[seo][fields][1]': 'metaDescription',
-        'populate[seo][fields][2]': 'metaImage',
-        'populate[seo][populate][metaImage][fields][0]': 'url'
+        'fields[4]': 'content'
       });
       
       return `/articles?${params.toString()}`;
@@ -93,20 +85,20 @@ export const strapiService = {
   }
 };
 
-// Transform API response to UI format
+// Transform API response to UI format (NO attributes wrapper)
 export const transformArticle = (article) => ({
   id: article.id,
-  title: article.attributes.title,
-  slug: article.attributes.slug,
-  excerpt: article.attributes.excerpt || '',
-  content: article.attributes.content || '',
-  category: article.attributes.category || 'Uncategorized',
-  publishedAt: article.attributes.publishedAt,
+  title: article.title,
+  slug: article.slug,
+  excerpt: article.description || '',
+  content: article.content || article.description || '',
+  category: 'Technology', // Default category since API doesn't provide it
+  publishedAt: article.publishedAt,
   cover: {
-    url: article.attributes.cover?.data?.attributes?.url,
-    alternativeText: article.attributes.cover?.data?.attributes?.alternativeText || article.attributes.title
+    url: null, // No cover image in your API response
+    alternativeText: article.title
   },
-  seo: article.attributes.seo || null
+  seo: null
 });
 
 export const transformArticlesResponse = (response) => {

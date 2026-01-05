@@ -6,29 +6,13 @@ import Layout from "@/components/Layout";
 import { LazyBlogCard } from "@/components/LazyBlogCard";
 import { DynamicNewsletter } from "@/components/DynamicNewsletter";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
-import { fetchArticles, mapArticlesToUi } from "@/lib/strapi";
+import { useArticles } from "@/hooks/useArticles";
 
 const Index = () => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const json = await fetchArticles();
-        const mapped = mapArticlesToUi(json);
-        if (mounted) setItems(mapped);
-      } catch (e) {
-        if (mounted) setError(e?.message || "Failed to load articles");
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-    return () => { mounted = false; };
-  }, []);
-
+  // Use optimized React Query hook
+  const { data, isLoading, error } = useArticles(1, 6);
+  
+  const items = data?.articles || [];
   const featuredPosts = items.slice(0, 2);
   const recentPosts = items.slice(0, 6);
 
@@ -171,7 +155,7 @@ const Index = () => {
             </Button>
           </div>
           
-          {loading ? (
+          {isLoading ? (
             <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
               {Array.from({ length: 2 }).map((_, i) => (
                 <div key={i} className="h-80 sm:h-96 bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl animate-pulse" />
@@ -219,7 +203,7 @@ const Index = () => {
             </Button>
           </div>
           
-          {loading ? (
+          {isLoading ? (
             <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="h-72 sm:h-80 bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl animate-pulse" />

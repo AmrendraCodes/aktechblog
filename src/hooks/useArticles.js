@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { strapiService, transformArticlesResponse, transformArticle } from '../api/strapi';
 
 // Custom hook for fetching articles with pagination
