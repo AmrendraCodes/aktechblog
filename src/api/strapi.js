@@ -101,6 +101,17 @@ export const strapiService = {
 
 // Transform API response to UI format (NO attributes wrapper)
 export const transformArticle = (article) => {
+  // Handle both fallback data and Strapi data
+  let imageUrl = null;
+  
+  if (article.featuredImage && article.featuredImage.data && article.featuredImage.data.attributes) {
+    // Strapi format: featuredImage.data.attributes.url
+    imageUrl = article.featuredImage.data.attributes.url;
+  } else if (article.image) {
+    // Fallback format: article.image
+    imageUrl = article.image;
+  }
+  
   // Transform to match BlogCard interface
   const transformed = {
     id: article.id,
@@ -111,13 +122,13 @@ export const transformArticle = (article) => {
     category: 'Technology', // Default category since API doesn't provide it
     publishedAt: article.publishedAt || new Date().toISOString(),
     cover: {
-      url: article.image || null, // Use image from API
+      url: imageUrl,
       alternativeText: article.title || 'Article image'
     },
     seo: null,
     
     // BlogCard component expects these fields
-    image: article.image || null, // Use image from API
+    image: imageUrl, // Use the extracted image URL
     date: article.publishedAt || new Date().toISOString(),
     readTime: '3 min read', // Default reading time
     imageData: null // For debugging
