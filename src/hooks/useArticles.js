@@ -3,16 +3,32 @@ import { strapiService, transformArticlesResponse, transformArticle } from '../a
 
 // Custom hook for fetching articles with pagination
 export const useArticles = (page = 1, pageSize = 6) => {
+  console.log('useArticles hook called with:', { page, pageSize });
+  
   return useQuery({
     queryKey: ['articles', page, pageSize],
-    queryFn: () => strapiService.fetchArticles(page, pageSize),
+    queryFn: () => {
+      console.log('Query function executing...');
+      return strapiService.fetchArticles(page, pageSize);
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    select: transformArticlesResponse,
+    select: (data) => {
+      console.log('Select function called with data:', data);
+      const result = transformArticlesResponse(data);
+      console.log('Select function result:', result);
+      return result;
+    },
     refetchOnWindowFocus: false,
     refetchOnReconnect: true,
+    onSuccess: (data) => {
+      console.log('Query onSuccess:', data);
+    },
+    onError: (error) => {
+      console.error('Query onError:', error);
+    }
   });
 };
 
