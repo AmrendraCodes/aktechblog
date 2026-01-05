@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles, Clock, Calendar, TrendingUp, BookOpen, Users, Zap, Code, Database, Cloud } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Layout from "@/components/Layout";
-import { LazyBlogCard } from "@/components/LazyBlogCard";
-import { DynamicNewsletter } from "@/components/DynamicNewsletter";
-import { PerformanceMonitor } from "@/components/PerformanceMonitor";
-import { useArticles } from "@/hooks/useArticles";
-import ApiTest from "@/components/ApiTest";
+import { Button } from "../components/ui/button";
+import Layout from "../components/Layout";
+import { LazyBlogCard } from "../components/LazyBlogCard";
+import { DynamicNewsletter } from "../components/DynamicNewsletter";
+import { PerformanceMonitor } from "../components/PerformanceMonitor";
+import { useArticles } from "../hooks/useArticles";
+import ApiTest from "../components/ApiTest";
+import SimpleTest from "../components/SimpleTest";
 
 const Index = () => {
   // Use optimized React Query hook
@@ -26,6 +27,9 @@ const Index = () => {
   return (
     <Layout>
       <PerformanceMonitor />
+      
+      {/* Simple Test Component - Basic API test */}
+      <SimpleTest />
       
       {/* API Test Component - Temporarily added for debugging */}
       <ApiTest />

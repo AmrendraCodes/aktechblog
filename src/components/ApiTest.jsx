@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { strapiService } from '@/api/strapi';
+import { strapiService } from '../api/strapi';
 
 const ApiTest = () => {
   const [testData, setTestData] = useState(null);
