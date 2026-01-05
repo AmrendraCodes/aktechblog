@@ -2,26 +2,50 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aktechblog.vercel.app/</loc>
-    <lastmod>2026-01-05T18:53:43.343Z</lastmod>
+    <lastmod>2026-01-05T19:21:32.705Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://aktechblog.vercel.app/blog</loc>
-    <lastmod>2026-01-05T18:53:43.343Z</lastmod>
+    <lastmod>2026-01-05T19:21:32.705Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://aktechblog.vercel.app/about</loc>
-    <lastmod>2026-01-05T18:53:43.343Z</lastmod>
+    <lastmod>2026-01-05T19:21:32.705Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://aktechblog.vercel.app/contact</loc>
-    <lastmod>2026-01-05T18:53:43.343Z</lastmod>
+    <lastmod>2026-01-05T19:21:32.705Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://aktechblog.vercel.app/blog/beautiful-picture</loc>
+    <lastmod>2026-01-05T19:21:32.705Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aktechblog.vercel.app/blog/green-tech-reshaping-tomorrow</loc>
+    <lastmod>2026-01-05T19:21:32.705Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aktechblog.vercel.app/blog/ai-agents-powering-digital-transformation</loc>
+    <lastmod>2026-01-05T19:21:32.705Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://aktechblog.vercel.app/blog/the-internet-s-own-boy</loc>
+    <lastmod>2026-01-05T19:21:32.705Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
