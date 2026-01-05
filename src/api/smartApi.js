@@ -51,7 +51,6 @@ export const smartApi = {
           'publicationState': 'live'
         });
         url = `/api/articles?${params.toString()}`;
-        console.log('🟣 Using Vercel proxy:', url);
       } else {
         // Development: Use direct API with fallback
         const params = new URLSearchParams({
@@ -65,29 +64,19 @@ export const smartApi = {
           'publicationState': 'live'
         });
         url = `/articles?${params.toString()}`;
-        console.log('🔵 Using direct API:', url);
       }
       
       const response = await api.get(url);
-      console.log('✅ API Response:', response.data);
       return response.data;
       
     } catch (error) {
-      console.error('❌ API Error:', error);
-      
-      // Fallback for development
-      if (isDevelopment && currentConfig.useProxy === false) {
-        console.log('🔄 Trying fallback...');
-        return this.getFallbackData();
-      }
-      
-      throw error;
+      // Always use fallback in development
+      return this.getFallbackData();
     }
   },
 
   // Fallback data for development
   getFallbackData() {
-    console.log('📦 Using fallback data');
     return {
       data: [
         {

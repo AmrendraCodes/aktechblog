@@ -7,24 +7,22 @@ import { LazyBlogCard } from "../components/LazyBlogCard";
 import { DynamicNewsletter } from "../components/DynamicNewsletter";
 import { PerformanceMonitor } from "../components/PerformanceMonitor";
 import { useArticles } from "../hooks/useArticles";
+import QuickTest from "../components/QuickTest";
 
 const Index = () => {
   // Use optimized React Query hook
   const { data, isLoading, error } = useArticles(1, 6);
   
-  console.log('Index component render:', { data, isLoading, error });
-  
   const items = data?.articles || [];
   const featuredPosts = items.slice(0, 2);
   const recentPosts = items.slice(0, 6);
-  
-  console.log('Items:', items);
-  console.log('Featured posts:', featuredPosts);
-  console.log('Recent posts:', recentPosts);
 
   return (
     <Layout>
       <PerformanceMonitor />
+      
+      {/* Quick Test Component - Debug API */}
+      <QuickTest />
       
       {/* Hero Section - Professional Tech Blog */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">

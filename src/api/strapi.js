@@ -55,12 +55,9 @@ export const strapiService = {
   // Fetch articles with pagination through smart API
   async fetchArticles(page = 1, pageSize = 6) {
     try {
-      console.log('🔄 Fetching articles through smart API...');
       const response = await smartApi.getArticles(page, pageSize);
-      console.log('✅ Smart API Response:', response);
       return response;
     } catch (error) {
-      console.error('❌ Error fetching articles through smart API:', error);
       throw error;
     }
   },
@@ -68,9 +65,7 @@ export const strapiService = {
   // Fetch single article by slug through smart API
   async fetchArticleBySlug(slug) {
     try {
-      console.log('🔄 Fetching article by slug through smart API:', slug);
       const response = await smartApi.getArticles(); // For now, get all and filter
-      console.log('✅ Article Smart API Response:', response);
       
       // Filter by slug
       const article = response.data?.find(article => article.slug === slug);
@@ -83,7 +78,6 @@ export const strapiService = {
       
       throw new Error('Article not found');
     } catch (error) {
-      console.error('❌ Error fetching article through smart API:', error);
       throw error;
     }
   },
@@ -100,7 +94,6 @@ export const strapiService = {
         }
       };
     } catch (error) {
-      console.error('❌ Error fetching articles count through smart API:', error);
       throw error;
     }
   }
@@ -108,8 +101,6 @@ export const strapiService = {
 
 // Transform API response to UI format (NO attributes wrapper)
 export const transformArticle = (article) => {
-  console.log('Transforming article:', article);
-  
   // Transform to match BlogCard interface
   const transformed = {
     id: article.id,
@@ -132,12 +123,10 @@ export const transformArticle = (article) => {
     imageData: null // For debugging
   };
   
-  console.log('Transformed article for UI:', transformed);
   return transformed;
 };
 
 export const transformArticlesResponse = (response) => {
-  console.log('Transforming response:', response);
   const articles = response.data?.map(transformArticle) || [];
   const pagination = response.meta?.pagination || {
     page: 1,
@@ -145,9 +134,6 @@ export const transformArticlesResponse = (response) => {
     pageCount: 1,
     total: articles.length
   };
-  
-  console.log('Transformed articles:', articles);
-  console.log('Pagination:', pagination);
   
   return { articles, pagination };
 };
