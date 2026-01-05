@@ -9,6 +9,7 @@ import { PerformanceMonitor } from "../components/PerformanceMonitor";
 import { useArticles } from "../hooks/useArticles";
 import ApiTest from "../components/ApiTest";
 import SimpleTest from "../components/SimpleTest";
+import BasicTest from "../components/BasicTest";
 
 const Index = () => {
   // Use optimized React Query hook
@@ -28,7 +29,10 @@ const Index = () => {
     <Layout>
       <PerformanceMonitor />
       
-      {/* Simple Test Component - Basic API test */}
+      {/* Basic Test Component - Simplest API test */}
+      <BasicTest />
+      
+      {/* Simple Test Component - Auto API test */}
       <SimpleTest />
       
       {/* API Test Component - Temporarily added for debugging */}
