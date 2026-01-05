@@ -36,38 +36,41 @@ export const smartApi = {
   // Get articles with smart routing
   async getArticles(page = 1, pageSize = 6) {
     try {
-      // Always use fallback data in development to avoid 500 errors
-      if (isDevelopment) {
-        console.log('🔧 Development mode - using fallback data');
-        return this.getFallbackData();
-      }
+      // Try to fetch from real Strapi API first
+      console.log('🌍 Attempting to fetch from real Strapi API...');
       
-      let url;
+      const strapiUrl = 'https://genuine-fun-ae6ecdb902.strapiapp.com/api/articles';
+      const params = new URLSearchParams({
+        'fields[0]': 'title',
+        'fields[1]': 'slug',
+        'fields[2]': 'description',
+        'fields[3]': 'publishedAt',
+        'sort[0]': 'publishedAt:desc',
+        'pagination[page]': page.toString(),
+        'pagination[pageSize]': pageSize.toString(),
+        'publicationState': 'live'
+      });
       
-      if (currentConfig.useProxy) {
-        // Production: Use Vercel proxy
-        const params = new URLSearchParams({
-          'fields[0]': 'title',
-          'fields[1]': 'slug',
-          'fields[2]': 'description',
-          'fields[3]': 'publishedAt',
-          'sort[0]': 'publishedAt:desc',
-          'pagination[page]': page.toString(),
-          'pagination[pageSize]': pageSize.toString(),
-          'publicationState': 'live'
-        });
-        url = `/api/articles?${params.toString()}`;
+      const response = await fetch(`${strapiUrl}?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Mozilla/5.0 (compatible; BlogApp/1.0)'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Real Strapi API success:', data.data?.length || 0, 'articles');
+        return data;
       } else {
-        // Fallback for any other case
-        return this.getFallbackData();
+        console.log('⚠️ Strapi API responded with:', response.status);
+        throw new Error(`Strapi API returned ${response.status}`);
       }
-      
-      const response = await api.get(url);
-      return response.data;
       
     } catch (error) {
+      console.log('🔄 Real API failed, using fallback data:', error.message);
       // Always use fallback as safety net
-      console.log('🔄 Using fallback data due to error');
       return this.getFallbackData();
     }
   },

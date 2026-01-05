@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Shield, Eye, Cookie, Database, User, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Layout from "@/components/Layout";
+import { Button } from "../components/ui/button";
+import Layout from "../components/Layout";
 
 const PrivacyPolicy = () => {
   const lastUpdated = "January 5, 2026";
