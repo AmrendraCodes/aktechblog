@@ -186,7 +186,7 @@ const PrivacyPolicy = () => {
                 </p>
                 
                 <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-                  <p><strong>Email:</strong> privacy@aktechblog.com</p>
+                  <p><strong>Email:</strong> amrendra1999official@gmail.com</p>
                   <p><strong>Contact Form:</strong> <Link to="/contact" className="text-primary hover:underline">Visit our contact page</Link></p>
                 </div>
               </div>
