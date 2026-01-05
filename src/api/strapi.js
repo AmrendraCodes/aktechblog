@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-// Strapi API configuration - Using your actual backend URL
-const STRAPI_URL = 'https://genuine-fun-a6ecdb902.strapiapp.com';
+// Strapi API configuration - Using Vercel proxy to avoid SSL issues
+const STRAPI_URL = ''; // Empty since we're using proxy
 const API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN;
 
 // Create axios instance with optimized configuration
 const strapiApi = axios.create({
-  baseURL: `${STRAPI_URL}/api`,
+  baseURL: '', // Base URL will be relative to proxy
   timeout: 10000, // 10 second timeout
   headers: {
     'Content-Type': 'application/json',
@@ -14,10 +14,10 @@ const strapiApi = axios.create({
   }
 });
 
-// Optimized API endpoints
+// Optimized API endpoints - Using Vercel proxy
 export const strapiEndpoints = {
   articles: {
-    // Fetch articles with ONLY required fields (no attributes wrapper)
+    // Fetch articles through Vercel proxy (server-to-server to Strapi)
     getArticles: (page = 1, pageSize = 6) => {
       const params = new URLSearchParams({
         'fields[0]': 'title',
@@ -30,10 +30,10 @@ export const strapiEndpoints = {
         'publicationState': 'live'
       });
       
-      return `/articles?${params.toString()}`;
+      return `/api/articles?${params.toString()}`;
     },
     
-    // Get single article by slug with minimal fields
+    // Get single article by slug through proxy
     getArticleBySlug: (slug) => {
       const params = new URLSearchParams({
         'filters[slug][$eq]': slug,
@@ -44,44 +44,46 @@ export const strapiEndpoints = {
         'fields[4]': 'content'
       });
       
-      return `/articles?${params.toString()}`;
+      return `/api/articles?${params.toString()}`;
     }
   }
 };
 
 // API service functions
 export const strapiService = {
-  // Fetch articles with pagination
+  // Fetch articles with pagination through proxy
   async fetchArticles(page = 1, pageSize = 6) {
     try {
-      console.log('Fetching articles from:', `${STRAPI_URL}/api/articles`);
+      console.log('Fetching articles through proxy:', `/api/articles?page=${page}&pageSize=${pageSize}`);
       const response = await strapiApi.get(strapiEndpoints.articles.getArticles(page, pageSize));
-      console.log('API Response:', response.data);
+      console.log('Proxy API Response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching articles:', error);
+      console.error('Error fetching articles through proxy:', error);
       throw error;
     }
   },
 
-  // Fetch single article by slug
+  // Fetch single article by slug through proxy
   async fetchArticleBySlug(slug) {
     try {
+      console.log('Fetching article by slug through proxy:', slug);
       const response = await strapiApi.get(strapiEndpoints.articles.getArticleBySlug(slug));
+      console.log('Article Proxy Response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching article:', error);
+      console.error('Error fetching article through proxy:', error);
       throw error;
     }
   },
 
-  // Get total articles count for pagination
+  // Get total articles count through proxy
   async getArticlesCount() {
     try {
-      const response = await strapiApi.get('/articles/count');
+      const response = await strapiApi.get('/api/articles/count');
       return response.data;
     } catch (error) {
-      console.error('Error fetching articles count:', error);
+      console.error('Error fetching articles count through proxy:', error);
       throw error;
     }
   }
