@@ -6,6 +6,7 @@ import Layout from "../components/Layout";
 import { LazyBlogCard } from "../components/LazyBlogCard";
 import { DynamicNewsletter } from "../components/DynamicNewsletter";
 import { useArticles } from "../hooks/useArticles";
+import StatusCheck from "../components/StatusCheck";
 
 const Index = () => {
   // Use optimized React Query hook
@@ -17,6 +18,8 @@ const Index = () => {
 
   return (
     <Layout>
+      <StatusCheck />
+      
       {/* Hero Section - Professional Tech Blog */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
         {/* Grid Background */}
@@ -214,7 +217,13 @@ const Index = () => {
             </div>
           ) : error ? (
             <div className="text-center py-20">
-              <p className="text-xl text-gray-400">{error}</p>
+              <p className="text-xl text-gray-400">Unable to load articles. Please refresh the page.</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="mt-4 px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+              >
+                Refresh Page
+              </button>
             </div>
           ) : recentPosts.length === 0 ? (
             <div className="text-center py-20">
