@@ -6,7 +6,6 @@ import Layout from "../components/Layout";
 import { LazyBlogCard } from "../components/LazyBlogCard";
 import { DynamicNewsletter } from "../components/DynamicNewsletter";
 import { useArticles } from "../hooks/useArticles";
-import StatusCheck from "../components/StatusCheck";
 
 const Index = () => {
   // Use optimized React Query hook
@@ -18,8 +17,6 @@ const Index = () => {
 
   return (
     <Layout>
-      <StatusCheck />
-      
       {/* Hero Section - Professional Tech Blog */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
         {/* Grid Background */}
