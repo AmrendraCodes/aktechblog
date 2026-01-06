@@ -1,36 +1,49 @@
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import Index from "./pages/Index";
+import Blog from "./pages/Blog";
+import AboutInteractive from "./pages/AboutInteractive";
+import Contact from "./pages/Contact";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
-const ArticlesList = lazy(() => import("./components/ArticlesList"));
-const BlogDetail = lazy(() => import("./components/BlogDetail"));
+const queryClient = new QueryClient();
 
-const App = () => {
-  return (
-    <BrowserRouter>
-      <Suspense
-        fallback={
-          <div className="flex justify-center items-center min-h-screen">
-            <p className="text-lg text-gray-500">Loading page...</p>
-          </div>
-        }
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
       >
         <Routes>
-          <Route path="/" element={<ArticlesList />} />
-          <Route path="/blog/:slug" element={<BlogDetail />} />
-
-          <Route
-            path="*"
-            element={
-              <div className="min-h-screen flex flex-col items-center justify-center">
-                <h1 className="text-4xl font-bold">404</h1>
-                <p className="mt-2 text-gray-600">Page not found</p>
-              </div>
-            }
-          />
+          {/* Homepage Route - IMPORTANT: This should load first */}
+          <Route path="/" element={<Index />} />
+          
+          {/* Articles Page */}
+          <Route path="/articles" element={<Blog />} />
+          
+          {/* About Page */}
+          <Route path="/about" element={<AboutInteractive />} />
+          
+          {/* Contact Page */}
+          <Route path="/contact" element={<Contact />} />
+          
+          {/* Privacy Policy Page */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          
+          {/* Catch all - redirect to homepage */}
+          <Route path="*" element={<Index />} />
         </Routes>
-      </Suspense>
-    </BrowserRouter>
-  );
-};
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;

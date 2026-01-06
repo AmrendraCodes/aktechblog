@@ -44,15 +44,15 @@ export const smartApi = {
       
       const strapiUrl = 'https://genuine-fun-ae6ecdb902.strapiapp.com/api/articles';
       
-      // Simple query string - no complex array notation
+      // Simple query string - include cover field in fields
       const queryParams = new URLSearchParams({
-        'populate': 'featuredImage',
-        'fields': 'title,description,slug,publishedAt',
-        'sort': 'publishedAt:desc',
-        'pagination[page]': page.toString(),
-        'pagination[pageSize]': pageSize.toString(),
-        'publicationState': 'live'
-      });
+  populate: '*',
+  sort: 'publishedAt:desc',
+  'pagination[page]': page.toString(),
+  'pagination[pageSize]': pageSize.toString(),
+  publicationState: 'live'
+});
+
       
       const fullUrl = `${strapiUrl}?${queryParams.toString()}`;
       console.log('📡 Full API URL:', fullUrl);

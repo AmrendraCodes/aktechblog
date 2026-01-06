@@ -6,6 +6,7 @@ const ArticlesList = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -21,14 +22,52 @@ const ArticlesList = () => {
       }
     };
 
+    // Set timeout for 1.5 seconds
+    const timeoutId = setTimeout(() => {
+      setTimeoutReached(true);
+    }, 1500);
+
     fetchArticles();
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
-  /* -------------------- Loading State -------------------- */
-  if (loading) {
+  // Show skeleton if loading for less than 1.5 seconds
+  if (loading && !timeoutReached) {
     return (
-      <div className="flex justify-center items-center py-24">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
+          <p className="text-gray-600">Loading articles...</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3, 4, 5, 6].map((skeleton) => (
+            <div key={skeleton} className="bg-white rounded-xl shadow-md overflow-hidden">
+              <div className="w-full h-48 bg-gray-200 animate-pulse"></div>
+              <div className="p-6">
+                <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
+                <div className="h-6 bg-gray-200 rounded animate-pulse mb-3"></div>
+                <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Show timeout state if loading exceeds 1.5 seconds
+  if (loading && timeoutReached) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
+          <p className="text-gray-600">Taking longer than expected...</p>
+        </div>
+        <div className="text-center py-24">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Still loading articles...</p>
+        </div>
       </div>
     );
   }
@@ -36,25 +75,35 @@ const ArticlesList = () => {
   /* -------------------- Error State -------------------- */
   if (error) {
     return (
-      <div className="max-w-2xl mx-auto my-12 p-6 bg-red-50 border border-red-200 rounded-lg text-center">
-        <h2 className="text-xl font-bold text-red-600 mb-2">
-          Error loading articles
-        </h2>
-        <p className="text-red-700">{error}</p>
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-2xl mx-auto my-12 p-6 bg-red-50 border border-red-200 rounded-lg text-center">
+          <h2 className="text-xl font-bold text-red-600 mb-2">
+            Error loading articles
+          </h2>
+          <p className="text-red-700">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
 
   /* -------------------- Empty State -------------------- */
-  if (articles.length === 0) {
+  if (!loading && articles.length === 0) {
     return (
-      <div className="text-center py-24">
-        <h2 className="text-3xl font-bold text-gray-700">
-          No articles found
-        </h2>
-        <p className="text-gray-500 mt-2">
-          Please check back later.
-        </p>
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center py-24">
+          <h2 className="text-3xl font-bold text-gray-700">
+            No articles found
+          </h2>
+          <p className="text-gray-500 mt-2">
+            Please check back later.
+          </p>
+        </div>
       </div>
     );
   }
