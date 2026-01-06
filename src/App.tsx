@@ -3,14 +3,13 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Suspense } from "react";
-import Index from "./pages/Index";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
+import { Suspense, lazy } from "react";
 import AboutInteractive from "./pages/AboutInteractive";
 import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import NotFound from "./pages/NotFound";
+
+const ArticlesList = lazy(() => import("./components/ArticlesList"));
+const BlogDetail = lazy(() => import("./components/BlogDetail"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,14 +46,36 @@ const App = () => (
       <BrowserRouter basename={getSafeBaseName()}>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
+            {/* Home / Blog List */}
+            <Route path="/" element={<ArticlesList />} />
+
+            {/* Blog Detail Page */}
+            <Route path="/blog/:slug" element={<BlogDetail />} />
+
+            {/* Other Pages */}
             <Route path="/about" element={<AboutInteractive />} />
             <Route path="/about-interactive" element={<AboutInteractive />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="*" element={<NotFound />} />
+
+            {/* 404 Page */}
+            <Route
+              path="*"
+              element={
+                <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
+                  <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
+                  <p className="text-xl text-gray-600 mb-6">
+                    Page not found
+                  </p>
+                  <a
+                    href="/"
+                    className="text-blue-600 font-semibold underline"
+                  >
+                    Go back to home
+                  </a>
+                </div>
+              }
+            />
           </Routes>
         </Suspense>
       </BrowserRouter>
