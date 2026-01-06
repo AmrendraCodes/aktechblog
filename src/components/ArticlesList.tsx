@@ -63,22 +63,23 @@ const ArticlesList = () => {
     <>
       <Helmet>
         <title>Latest Articles | AK Tech Blog</title>
-        <meta name="description" content="Read the latest articles on web development, technology, and programming tutorials at AK Tech Blog." />
+        <meta name="description" content="Read the latest articles on web development, technology, and programming at AK Tech Blog." />
       </Helmet>
       
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
           <p className="text-gray-600">
-            Showing {articles.length} articles
+            Showing {Array.isArray(articles) ? articles.length : 0} articles
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((article) => {
+          {Array.isArray(articles) && articles.filter(Boolean).map((article) => {
+            if (!article || !article.attributes) return null;
+            
             const { id, attributes } = article;
-            const imageUrl =
-              attributes.cover?.data?.attributes?.url;
+            const imageUrl = attributes?.cover?.data?.attributes?.url;
 
             return (
               <div
@@ -88,7 +89,7 @@ const ArticlesList = () => {
                 {imageUrl ? (
                   <img
                     src={imageUrl}
-                    alt={attributes.title}
+                    alt={attributes?.title || 'Article'}
                     loading="lazy"
                     className="w-full h-48 object-cover"
                   />
@@ -100,19 +101,19 @@ const ArticlesList = () => {
 
                 <div className="p-6">
                   <p className="text-sm text-gray-400 mb-2">
-                    {new Date(attributes.publishedAt).toLocaleDateString()}
+                    {attributes?.publishedAt ? new Date(attributes.publishedAt).toLocaleDateString() : 'No date'}
                   </p>
 
                   <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
-                    {attributes.title}
+                    {attributes?.title || 'Untitled Article'}
                   </h3>
 
                   <p className="text-gray-600 mb-4 line-clamp-3">
-                    {attributes.description}
+                    {attributes?.description || 'No description available'}
                   </p>
 
                   <Link
-                    to={`/blog/${attributes.slug}`}
+                    to={`/blog/${attributes?.slug || 'no-slug'}`}
                     className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800 transition-colors"
                   >
                     Read More
