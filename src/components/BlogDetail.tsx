@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 
 const STRAPI_URL = import.meta.env.VITE_STRAPI_URL;
 
@@ -98,17 +97,7 @@ const BlogDetail = () => {
 
   /* -------------------- Article -------------------- */
   return (
-    <>
-      <Helmet>
-        <title>{attributes.title} | AK Tech Blog</title>
-        <meta name="description" content={attributes.description} />
-        <meta property="og:title" content={attributes.title} />
-        <meta property="og:description" content={attributes.description} />
-        {imageUrl && <meta property="og:image" content={imageUrl} />}
-        <meta property="og:type" content="article" />
-      </Helmet>
-
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
           to="/"
           className="text-blue-600 font-semibold mb-6 inline-block"
@@ -140,8 +129,7 @@ const BlogDetail = () => {
         <p className="text-lg text-gray-700 leading-relaxed">
           {attributes.description}
         </p>
-      </div>
-    </>
+    </div>
   );
 };
 
