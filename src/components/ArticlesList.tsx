@@ -85,13 +85,17 @@ const ArticlesList = () => {
                 key={id}
                 className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden"
               >
-                {imageUrl && (
+                {imageUrl ? (
                   <img
                     src={imageUrl}
                     alt={attributes.title}
                     loading="lazy"
                     className="w-full h-48 object-cover"
                   />
+                ) : (
+                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                    <img src="/placeholder.svg" alt="Placeholder" className="w-16 h-16 opacity-50" />
+                  </div>
                 )}
 
                 <div className="p-6">

@@ -39,7 +39,8 @@ const BlogDetail = () => {
         }
 
         const json = await res.json();
-        setArticle(json.data[0] || null);
+        const articleData = json?.data?.[0];
+        setArticle(articleData || null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Something went wrong");
       } finally {
@@ -115,13 +116,17 @@ const BlogDetail = () => {
           ← Back to Articles
         </Link>
 
-        {imageUrl && (
+        {imageUrl ? (
           <img
             src={imageUrl}
             alt={attributes.title}
             loading="lazy"
             className="w-full h-96 object-cover rounded-xl mb-8"
           />
+        ) : (
+          <div className="w-full h-96 bg-gray-200 rounded-xl mb-8 flex items-center justify-center">
+            <img src="/placeholder.svg" alt="Placeholder" className="w-24 h-24 opacity-50" />
+          </div>
         )}
 
         <p className="text-sm text-gray-400 mb-2">

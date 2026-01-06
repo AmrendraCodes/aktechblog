@@ -51,7 +51,7 @@ export const getArticles = async (): Promise<Article[]> => {
     }
 
     const data: StrapiResponse = await response.json();
-    return data.data;
+    return (data?.data || []).filter(article => article != null);
   } catch (error) {
     console.error('Error fetching articles from Strapi:', error);
     throw error;
