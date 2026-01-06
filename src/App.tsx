@@ -28,22 +28,12 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Safe basename with fallback
-const getSafeBaseName = () => {
-  try {
-    return import.meta.env.BASE_URL || '/';
-  } catch (error) {
-    console.warn('Failed to get BASE_URL, using fallback:', error);
-    return '/';
-  }
-};
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename={getSafeBaseName()}>
+      <BrowserRouter>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             {/* Home / Blog List */}
