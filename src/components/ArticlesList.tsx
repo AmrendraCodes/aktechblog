@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import { getArticles, Article } from "../services/strapi";
 
 const ArticlesList = () => {
@@ -71,61 +70,47 @@ const ArticlesList = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {Array.isArray(articles) && articles.filter(Boolean).map((article) => {
-          if (!article || !article.attributes) return null;
-          
-          const { id, attributes } = article;
-          const imageUrl = attributes?.cover?.data?.attributes?.url;
+        {Array.isArray(articles) && articles.map((article) => {
+          if (!article) return null;
+
+          const imageUrl = article.attributes?.cover?.data?.attributes?.url ?? null;
 
           return (
             <div
-              key={id}
+              key={article.id}
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden"
             >
               {imageUrl ? (
                 <img
                   src={imageUrl}
-                  alt={attributes?.title || 'Article'}
+                  alt={article.attributes?.title}
                   loading="lazy"
                   className="w-full h-48 object-cover"
                 />
               ) : (
-                <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                  <img src="/placeholder.svg" alt="Placeholder" className="w-16 h-16 opacity-50" />
+                <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
+                  No image
                 </div>
               )}
 
               <div className="p-6">
                 <p className="text-sm text-gray-400 mb-2">
-                  {attributes?.publishedAt ? new Date(attributes.publishedAt).toLocaleDateString() : 'No date'}
+                  {new Date(article.attributes?.publishedAt).toLocaleDateString()}
                 </p>
 
                 <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
-                  {attributes?.title || 'Untitled Article'}
+                  {article.attributes?.title}
                 </h3>
 
                 <p className="text-gray-600 mb-4 line-clamp-3">
-                  {attributes?.description || 'No description available'}
+                  {article.attributes?.description}
                 </p>
 
                 <Link
-                  to={`/blog/${attributes?.slug || 'no-slug'}`}
-                  className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800 transition-colors"
+                  to={`/blog/${article.attributes?.slug}`}
+                  className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800"
                 >
-                  Read More
-                  <svg
-                    className="w-4 h-4 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  Read More →
                 </Link>
               </div>
             </div>
