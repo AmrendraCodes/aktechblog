@@ -1,33 +1,27 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getArticles } from "../services/strapi";
-import { Article } from "../types/article";
-
-const STRAPI_URL = import.meta.env.VITE_STRAPI_URL;
-
-const getImageUrl = (url?: string): string | null => {
-  if (!url) return null;
-  // If URL is already absolute (starts with http), return as is
-  if (url.startsWith('http')) return url;
-  // Otherwise, prepend the Strapi base URL
-  return `${STRAPI_URL}${url}`;
-};
+import { fetchArticles } from "../utils/smartApi";
 
 const ArticlesList = () => {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
-    const fetchArticles = async () => {
+    const loadArticles = async () => {
       try {
-        const data = await getArticles();
-        console.log('Articles fetched:', data);
-        setArticles(data);
+        const result = await fetchArticles({ page: 1, pageSize: 6 });
+        console.log('Articles fetched:', result);
+
+        if (result.success && result.articles) {
+          setArticles(result.articles);
+        } else {
+          setArticles([]);
+        }
       } catch (err) {
         console.error('Error fetching articles:', err);
-        setError(err instanceof Error ? err.message : "Failed to load articles");
+        setError(err.message || "Failed to load articles");
       } finally {
         setLoading(false);
       }
@@ -38,8 +32,8 @@ const ArticlesList = () => {
       setTimeoutReached(true);
     }, 1500);
 
-    fetchArticles();
-    
+    loadArticles();
+
     return () => clearTimeout(timeoutId);
   }, []);
 
@@ -131,15 +125,9 @@ const ArticlesList = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {Array.isArray(articles) && articles.map((article) => {
+          const imageUrl = article.image || null;
 
-  console.log(" ARTICLE OBJECT", article);
-  console.log("IMAGE FIELD", article.image);
-  console.log("COVER FIELD", article.cover);
-
-  const imageUrl = article.image || article.cover?.url || null;
-
-  return (
-
+          return (
             <div
               key={article.id}
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden"

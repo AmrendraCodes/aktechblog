@@ -54,7 +54,9 @@ export const fetchArticles = async (params = {}) => {
     return {
       articles: transformedArticles,
       meta: transformedMeta,
-      success: true
+      success: true,
+      // Backward compatibility: also include data property
+      data: transformedArticles
     }
 
   } catch (error) {

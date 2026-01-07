@@ -73,7 +73,11 @@ export const strapiService = {
   async fetchArticles(page = 1, pageSize = 6) {
     try {
       const response = await smartApi.getArticles(page, pageSize);
-      return response;
+      // Handle new smartApi structure: { success, articles, meta }
+      return {
+        data: response.articles || [],
+        meta: response.meta || { pagination: { page: 1, pageSize: 6, pageCount: 1, total: 0 } }
+      };
     } catch (error) {
       throw error;
     }
@@ -83,16 +87,16 @@ export const strapiService = {
   async fetchArticleBySlug(slug) {
     try {
       const response = await smartApi.getArticles(); // For now, get all and filter
-      
-      // Filter by slug
-      const article = response.data?.find(article => article.slug === slug);
+
+      // Filter by slug - handle new structure
+      const article = response.articles?.find(article => article.slug === slug);
       if (article) {
         return {
           data: [article],
           meta: response.meta
         };
       }
-      
+
       throw new Error('Article not found');
     } catch (error) {
       throw error;
@@ -106,7 +110,7 @@ export const strapiService = {
       return {
         data: {
           attributes: {
-            count: response.meta?.pagination?.total || 0
+            count: response.meta?.pagination?.total || response.articles?.length || 0
           }
         }
       };
