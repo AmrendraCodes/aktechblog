@@ -32,7 +32,7 @@ const Index = () => {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-cyan-400 px-6 py-3 rounded-full text-sm font-medium border border-cyan-400/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
               <Code className="h-4 w-4 animate-pulse" />
-              <span className="text-cyan-300">Tech Blog for Developers</span>
+              <span className="text-cyan-300">Our Devloper Community</span>
               <TrendingUp className="h-4 w-4" />
             </div>
             
@@ -40,10 +40,10 @@ const Index = () => {
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
                 <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  Build. Learn.
+                  Welcome in
                 </span>
                 <br />
-                <span className="text-white">Deploy. Scale.</span>
+                <span className="text-white">Tech World Space</span>
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-4">
                 Deep dives into modern web development, cloud architecture, and cutting-edge technologies. 
