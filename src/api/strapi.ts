@@ -1,6 +1,23 @@
 import axios from 'axios';
 import { smartApi } from './smartApi';
 
+export interface Article {
+  id: number;
+  title: string;
+  slug: string;
+  description: string | null;
+  publishedAt: string;
+
+  cover?: {
+    url?: string;
+    formats?: {
+      small?: { url: string };
+      medium?: { url: string };
+      large?: { url: string };
+      thumbnail?: { url: string };
+    };
+  };
+}
 // Strapi API configuration - Smart routing
 const STRAPI_URL = ''; // Empty since we're using smart API
 const API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN;

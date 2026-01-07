@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getArticles, Article } from "../services/strapi";
+import { getArticles } from "../services/strapi";
+import { Article } from "../types/article";
+
+const STRAPI_URL = import.meta.env.VITE_STRAPI_URL;
+
+const getImageUrl = (url?: string): string | null => {
+  if (!url) return null;
+  // If URL is already absolute (starts with http), return as is
+  if (url.startsWith('http')) return url;
+  // Otherwise, prepend the Strapi base URL
+  return `${STRAPI_URL}${url}`;
+};
 
 const ArticlesList = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -120,11 +131,15 @@ const ArticlesList = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {Array.isArray(articles) && articles.map((article) => {
-          if (!article) return null;
 
-          const imageUrl = article.attributes?.cover?.data?.attributes?.url ?? null;
+  console.log(" ARTICLE OBJECT", article);
+  console.log("IMAGE FIELD", article.image);
+  console.log("COVER FIELD", article.cover);
 
-          return (
+  const imageUrl = article.image || article.cover?.url || null;
+
+  return (
+
             <div
               key={article.id}
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden"
@@ -144,19 +159,19 @@ const ArticlesList = () => {
 
               <div className="p-6">
                 <p className="text-sm text-gray-400 mb-2">
-                  {new Date(article.attributes?.publishedAt).toLocaleDateString()}
+                  {new Date(article.publishedAt).toLocaleDateString()}
                 </p>
 
                 <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
-                  {article.attributes?.title}
+                  {article.title}
                 </h3>
 
                 <p className="text-gray-600 mb-4 line-clamp-3">
-                  {article.attributes?.description}
+                  {article.description}
                 </p>
 
                 <Link
-                  to={`/blog/${article.attributes?.slug}`}
+                  to={`/blog/${article.slug}`}
                   className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800"
                 >
                   Read More →

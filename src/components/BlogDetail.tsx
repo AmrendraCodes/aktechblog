@@ -1,24 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Article } from "../types/article";
 
 const STRAPI_URL = import.meta.env.VITE_STRAPI_URL;
 
-interface Article {
-  id: number;
-  attributes: {
-    title: string;
-    description: string;
-    slug: string;
-    publishedAt: string;
-    cover?: {
-      data?: {
-        attributes?: {
-          url: string;
-        };
-      };
-    };
-  };
-}
+const getImageUrl = (url?: string): string | null => {
+  if (!url) return null;
+  // If URL is already absolute (starts with http), return as is
+  if (url.startsWith('http')) return url;
+  // Otherwise, prepend the Strapi base URL
+  return `${STRAPI_URL}${url}`;
+};
 
 const BlogDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -91,9 +83,11 @@ const BlogDetail = () => {
     );
   }
 
-  const { attributes } = article;
   const imageUrl =
-    attributes.cover?.data?.attributes?.url;
+    getImageUrl(article.cover?.formats?.medium?.url) ||
+    getImageUrl(article.cover?.formats?.small?.url) ||
+    getImageUrl(article.cover?.url) ||
+    null;
 
   /* -------------------- Article -------------------- */
   return (
@@ -108,7 +102,7 @@ const BlogDetail = () => {
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={attributes.title}
+            alt={article.title}
             loading="lazy"
             className="w-full h-96 object-cover rounded-xl mb-8"
           />
@@ -119,15 +113,15 @@ const BlogDetail = () => {
         )}
 
         <p className="text-sm text-gray-400 mb-2">
-          {new Date(attributes.publishedAt).toLocaleDateString()}
+          {new Date(article.publishedAt).toLocaleDateString()}
         </p>
 
         <h1 className="text-4xl font-bold mb-6 text-gray-900">
-          {attributes.title}
+          {article.title}
         </h1>
 
         <p className="text-lg text-gray-700 leading-relaxed">
-          {attributes.description}
+          {article.description}
         </p>
     </div>
   );

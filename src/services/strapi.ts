@@ -1,22 +1,6 @@
-const STRAPI_URL = import.meta.env.VITE_STRAPI_URL;
+import { Article } from '../types/article';
 
-export interface Article {
-  id: number;
-  attributes: {
-    title: string;
-    description: string;
-    content: string;
-    slug: string;
-    publishedAt: string;
-    cover?: {
-      data?: {
-        attributes: {
-          url: string;
-        };
-      };
-    };
-  };
-}
+const STRAPI_URL = import.meta.env.VITE_STRAPI_URL;
 
 interface StrapiResponse {
   data: Article[];
@@ -36,8 +20,24 @@ export const getArticles = async (): Promise<Article[]> => {
       throw new Error('VITE_STRAPI_URL is not defined in environment variables');
     }
 
+    const params = new URLSearchParams({
+      'fields[0]': 'title',
+      'fields[1]': 'slug',
+      'fields[2]': 'description',
+      'fields[3]': 'publishedAt',
+      'fields[4]': 'hasFeaturedImage',
+
+      // ✅ THIS IS THE KEY FIX - Properly populate cover with all formats
+      'populate[cover]': 'true',
+
+      'sort[0]': 'publishedAt:desc',
+      'pagination[page]': '1',
+      'pagination[pageSize]': '6',
+      'publicationState': 'live'
+    });
+
     const response = await fetch(
-      `${STRAPI_URL}/api/articles?populate=cover&sort=publishedAt:desc`,
+      `${STRAPI_URL}/api/articles?${params.toString()}`,
       {
         method: 'GET',
         headers: {
