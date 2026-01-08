@@ -111,6 +111,29 @@ The **About section** explains the vision of the blog — sharing knowledge, dee
 
 ---
 
+
+##Real-World Challenges & Debugging Experience
+
+## 🧩 Real-World Challenges & Debugging Experience
+
+This project helped me gain hands-on experience with real production-level issues while integrating a frontend with Strapi Cloud CMS.
+
+- Designed the initial UI using a custom method, then imported the project into GitHub and continued development using VS Code and an AI-assisted code editor.
+- Redesigned the Home page and sub-pages using React after the initial setup.
+- Deployed the project on Vercel and integrated it with Strapi Cloud CMS.
+- Faced initial Strapi integration failures and resolved them by debugging API calls and CMS configuration.
+- Fixed delayed blog rendering issues caused by inefficient API queries and missing pagination logic.
+- Identified performance issues caused by using `populate=*` and optimized the populate strategy.
+- Debugged missing content issues that occurred after populate changes.
+- Resolved `400` API errors by correctly setting up environment variables and adding a secure API token.
+- Regenerated and configured Strapi API tokens from the admin panel to restore data access.
+- Implemented SEO improvements using React Helmet and debugged blank-screen issues caused by misconfiguration.
+- Debugged role-based permission issues in Strapi where incorrect field access (`featureimage` instead of `cover`) caused data mismatch.
+- Resolved blank page and buffering issues where data was fetched, but React routing failed to re-render correctly.
+- Fixed image rendering issues where outdated API attributes were returning stale data by correcting attribute paths.
+- Actively used browser DevTools (Network & Console) to trace API responses, caching issues, and rendering bugs.
+
+
 ## 🛠️ Future Improvements
 
 * 🔐 Authentication (Admin / Author)
