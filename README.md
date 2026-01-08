@@ -1,73 +1,144 @@
-# Welcome to your Lovable project
+# AK Tech Blog 🚀
 
-## Project info
+A modern **Tech Blog website** built with a clean UI, dark mode support, and CMS-driven content. This project is designed to showcase technical blogs related to **web development, AI, cloud, and modern technologies**.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+🔗 **Live Preview**: *(https://aktechblog.vercel.app/)*
 
-## How can I edit this code?
+🔗 **GitHub Repo**: [https://github.com/AmrendraCodes/aktechblog](https://github.com/AmrendraCodes/aktechblog)
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 📸 Screenshots
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### 🏠 Home Page
 
-Changes made via Lovable will be committed automatically to this repo.
+<img width="1907" height="942" alt="image" src="https://github.com/user-attachments/assets/17835f94-38b5-456f-b289-e22856d71eeb" />
 
-**Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 📰 Blog Page
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-Follow these steps:
+<img width="1903" height="920" alt="image" src="https://github.com/user-attachments/assets/2678b955-1793-4c8f-9975-92fff0cff1cb" />
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 📰 About Page 
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+<img width="1920" height="967" alt="image" src="https://github.com/user-attachments/assets/32c7134a-6c02-4e0d-b3c8-8c36549d1e52" />
 
-# Step 3: Install the necessary dependencies.
-npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+---
+
+## ✨ Features
+
+* ⚡ Modern UI with gradient hero section
+* 🌙 Dark mode support
+* 📝 Blog listing with categories
+* 🔍 Search functionality for blogs
+* 📅 Blog metadata (date & read time)
+* 📱 Fully responsive design
+* 🔗 Dedicated pages: Home, Blog, About, Contact
+* 🧩 CMS-ready architecture (Strapi-friendly)
+
+---
+
+## 🧑‍💻 Tech Stack
+
+* **Frontend**: HTML, CSS, JavaScript
+* **Framework**: React / Vite *(if applicable)*
+* **Styling**: Tailwind CSS / Custom CSS
+* **CMS**: Strapi (Headless CMS)
+* **Deployment**: Vercel 
+
+---
+
+## 📂 Project Structure
+
+```
+aktechblog/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   │   ├── Home
+│   │   ├── Blog
+│   │   ├── About
+│   │   └── Contact
+│   ├── assets/
+│   └── utils/
+├── .env
+├── package.json
+└── README.md
+```
+
+---
+
+## ⚙️ Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_STRAPI_API_URL=your_strapi_api_url
+VITE_STRAPI_API_TOKEN=your_api_token
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/AmrendraCodes/aktechblog.git
+cd aktechblog
+```
+
+### 2️⃣ Install dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Start development server
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📖 About Page
 
-**Use GitHub Codespaces**
+The **About section** explains the vision of the blog — sharing knowledge, deep dives, and practical guides written **by developers, for developers**.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 🛠️ Future Improvements
 
-This project is built with:
+* 🔐 Authentication (Admin / Author)
+* 🗂️ Blog pagination
+* 🏷️ Tags & advanced filters
+* 💬 Comments system
+* 📈 SEO optimization
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## 🤝 Contributing
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Contributions are welcome! Feel free to fork this repo and submit a pull request.
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 📄 License
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+This project is licensed under the **MIT License**.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+## 🙋‍♂️ Author
+
+**Amrendra Kumar**
+Frontend Developer | Tech Enthusiast
+GitHub: [@AmrendraCodes](https://github.com/AmrendraCodes)
+
+---
+
+⭐ If you like this project, don’t forget to **star the repository**!
