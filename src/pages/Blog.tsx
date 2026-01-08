@@ -139,7 +139,8 @@ const Blog = () => {
 
       {/* Articles Section */}
       <div className="container mx-auto px-4 py-12">
-        {articles.length === 0 ? (
+        {/* Show articles only when loading is false */}
+        {!loading && articles.length === 0 ? (
           <div className="text-center py-24">
             <h2 className="text-3xl font-bold text-gray-700 mb-4">
               No articles found
@@ -148,7 +149,7 @@ const Blog = () => {
               Please check back later.
             </p>
           </div>
-        ) : (
+        ) : !loading && articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {articles.map((article) => (
               <div
@@ -229,16 +230,18 @@ const Blog = () => {
               </div>
             ))}
           </div>
-        )}
+        ) : null}
         
-        {/* Debug Info */}
-        <div className="mt-8 p-4 bg-gray-100 rounded-lg text-sm">
-          <h3 className="font-bold mb-2">Debug Information:</h3>
-          <p>📊 Total Articles: {articles.length}</p>
-          <p>📄 Meta Total: {meta.total}</p>
-          <p>🔄 From Fallback: {apiResult?.fromFallback ? 'Yes' : 'No'}</p>
-          <p>✅ Success: {apiResult?.success ? 'Yes' : 'No'}</p>
-        </div>
+        {/* Debug Info - Only show when not loading */}
+        {!loading && (
+          <div className="mt-8 p-4 bg-gray-100 rounded-lg text-sm">
+            <h3 className="font-bold mb-2">Debug Information:</h3>
+            <p>📊 Total Articles: {articles.length}</p>
+            <p>📄 Meta Total: {meta.total}</p>
+            <p>🔄 From Fallback: {apiResult?.fromFallback ? 'Yes' : 'No'}</p>
+            <p>✅ Success: {apiResult?.success ? 'Yes' : 'No'}</p>
+          </div>
+        )}
       </div>
     </div>
   )
