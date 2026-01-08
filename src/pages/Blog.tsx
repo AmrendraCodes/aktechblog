@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom'
 const Blog = () => {
   const [articles, setArticles] = useState([])
   const [meta, setMeta] = useState({ total: 0 })
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false) // Start with false to avoid flash
   const [error, setError] = useState(null)
   const [apiResult, setApiResult] = useState(null)
+  const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -15,34 +16,66 @@ const Blog = () => {
         setLoading(true)
         setError(null)
         
+        console.log('🔄 Starting to load articles...')
+        
         const result = await fetchArticles({
           page: 1,
           pageSize: 6
         })
         
-        console.log('📊 API Result:', result)
+        console.log('📊 API Result received:', result)
         
-        if (result.success) {
-          setArticles(result.articles)
-          setMeta(result.meta)
+        if (result && result.success) {
+          console.log('✅ Setting articles:', result.articles)
+          setArticles(result.articles || [])
+          setMeta(result.meta || { total: 0 })
           setApiResult(result)
           
           if (result.fromFallback) {
             console.log('🔄 Using fallback data - API connection failed')
           } else {
             console.log('✅ Real API data loaded successfully!')
-            console.log('📈 Articles count:', result.articles.length)
-            console.log('📄 Meta data:', result.meta)
+            console.log('📈 Articles count:', result.articles?.length || 0)
           }
         } else {
-          throw new Error('Failed to load articles')
+          console.log('❌ API result failed:', result)
+          throw new Error('Failed to load articles - invalid response')
         }
         
       } catch (err) {
         console.error('❌ Error in component:', err)
         setError(err.message || 'Failed to load articles')
+        
+        // Set fallback data on error
+        const fallbackArticles = [
+          {
+            id: 1,
+            title: "Sample Article 1",
+            description: "This is a sample article for testing purposes.",
+            slug: "sample-article-1",
+            publishedAt: new Date().toISOString(),
+            image: "https://images.unsplash.com/photo-16333563156487-e27c5e28486?w=800&h=400&fit=crop",
+            author: {
+              name: "Test Author",
+              email: "test@example.com",
+              bio: "Test author bio"
+            },
+            category: {
+              name: "Test Category",
+              slug: "test-category"
+            }
+          }
+        ]
+        
+        console.log('🔄 Setting fallback articles:', fallbackArticles)
+        setArticles(fallbackArticles)
+        setMeta({ total: 1 })
+        setApiResult({ success: true, fromFallback: true })
+        
       } finally {
         setLoading(false)
+        setInitialized(true)
+        console.log('✅ Loading completed')
       }
     }
 
@@ -63,8 +96,8 @@ const Blog = () => {
     }
   }
 
-  // Loading skeletons
-  if (loading) {
+  // Loading skeletons - Only show during initial load or refresh
+  if (loading || !initialized) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         {/* Hero Section */}
@@ -139,8 +172,8 @@ const Blog = () => {
 
       {/* Articles Section */}
       <div className="container mx-auto px-4 py-12">
-        {/* Show articles only when loading is false */}
-        {!loading && articles.length === 0 ? (
+        {/* Show empty state only when initialized and no articles */}
+        {initialized && !loading && articles.length === 0 ? (
           <div className="text-center py-24">
             <h2 className="text-3xl font-bold text-gray-700 mb-4">
               No articles found
@@ -149,7 +182,7 @@ const Blog = () => {
               Please check back later.
             </p>
           </div>
-        ) : !loading && articles.length > 0 ? (
+        ) : initialized && !loading && articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {articles.map((article) => (
               <div
@@ -232,14 +265,16 @@ const Blog = () => {
           </div>
         ) : null}
         
-        {/* Debug Info - Only show when not loading */}
-        {!loading && (
+        {/* Debug Info - Only show when initialized and not loading */}
+        {initialized && !loading && (
           <div className="mt-8 p-4 bg-gray-100 rounded-lg text-sm">
             <h3 className="font-bold mb-2">Debug Information:</h3>
             <p>📊 Total Articles: {articles.length}</p>
             <p>📄 Meta Total: {meta.total}</p>
             <p>🔄 From Fallback: {apiResult?.fromFallback ? 'Yes' : 'No'}</p>
             <p>✅ Success: {apiResult?.success ? 'Yes' : 'No'}</p>
+            <p>🔄 Initialized: {initialized ? 'Yes' : 'No'}</p>
+            <p>⏳ Loading: {loading ? 'Yes' : 'No'}</p>
           </div>
         )}
       </div>
