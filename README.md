@@ -1,52 +1,64 @@
 # AK Tech Blog 🚀
 
-A modern **Tech Blog website** built with a clean UI, dark mode support, and CMS-driven content. This project is designed to showcase technical blogs related to **web development, AI, cloud, and modern technologies**.
+[Live Preview](https://aktechblog.vercel.app/) • [GitHub Repo](https://github.com/AmrendraCodes/aktechblog)
 
-🔗 **Live Preview**: *(https://aktechblog.vercel.app/)*
-
-🔗 **GitHub Repo**: [https://github.com/AmrendraCodes/aktechblog](https://github.com/AmrendraCodes/aktechblog)
+A modern tech blog website with a clean UI, dark mode, and CMS-driven content. The project focuses on web development, AI, cloud, and other modern web topics.
 
 ---
 
-## 📸 Screenshots
+## Table of Contents
 
-### 🏠 Home Page
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Environment Variables](#environment-variables)
+- [Getting Started](#getting-started)
+- [About Page & Vision](#about-page--vision)
+- [Real-World Challenges & Debugging Experience](#real-world-challenges--debugging-experience)
+- [Future Improvements](#future-improvements)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
-<img width="1907" height="942" alt="image" src="https://github.com/user-attachments/assets/17835f94-38b5-456f-b289-e22856d71eeb" />
+---
 
+## Screenshots
 
-### 📰 Blog Page
+Replace these with your repository images or a `screenshots/` folder for better control.
 
+### Home Page
+![Home page screenshot](https://github.com/user-attachments/assets/17835f94-38b5-456f-b289-e22856d71eeb)
 
-<img width="1903" height="920" alt="image" src="https://github.com/user-attachments/assets/2678b955-1793-4c8f-9975-92fff0cff1cb" />
+### Blog Page
+![Blog page screenshot](https://github.com/user-attachments/assets/2678b955-1793-4c8f-9975-92fff0cff1cb)
 
-### 📰 About Page 
-
-<img width="1920" height="967" alt="image" src="https://github.com/user-attachments/assets/32c7134a-6c02-4e0d-b3c8-8c36549d1e52" />
-
+### About Page
+![About page screenshot](https://github.com/user-attachments/assets/32c7134a-6c02-4e0d-b3c8-8c36549d1e52)
 
 ---
 
 ## ✨ Features
 
-* ⚡ Modern UI with gradient hero section
-* 🌙 Dark mode support
-* 📝 Blog listing with categories
-* 🔍 Search functionality for blogs
-* 📅 Blog metadata (date & read time)
-* 📱 Fully responsive design
-* 🔗 Dedicated pages: Home, Blog, About, Contact
-* 🧩 CMS-ready architecture (Strapi-friendly)
+- ⚡ Modern UI with gradient hero section
+- 🌙 Dark mode support
+- 📝 Blog listing with categories
+- 🔍 Search functionality for blogs
+- 📅 Blog metadata (date & read time)
+- 📱 Fully responsive design
+- 🔗 Dedicated pages: Home, Blog, About, Contact
+- 🧩 CMS-ready architecture (Strapi-friendly)
 
 ---
 
 ## 🧑‍💻 Tech Stack
 
-* **Frontend**: HTML, CSS, JavaScript
-* **Framework**: React / Vite *(if applicable)*
-* **Styling**: Tailwind CSS / Custom CSS
-* **CMS**: Strapi (Headless CMS)
-* **Deployment**: Vercel 
+- Frontend: HTML, CSS, JavaScript
+- Framework: React + Vite
+- Styling: Tailwind CSS (or custom CSS)
+- CMS: Strapi (Headless CMS)
+- Deployment: Vercel
 
 ---
 
@@ -58,10 +70,10 @@ aktechblog/
 ├── src/
 │   ├── components/
 │   ├── pages/
-│   │   ├── Home
-│   │   ├── Blog
-│   │   ├── About
-│   │   └── Contact
+│   │   ├── Home/
+│   │   ├── Blog/
+│   │   ├── About/
+│   │   └── Contact/
 │   ├── assets/
 │   └── utils/
 ├── .env
@@ -71,97 +83,133 @@ aktechblog/
 
 ---
 
+## Prerequisites
+
+- Node.js (recommend LTS, e.g. 18+)
+- npm or yarn
+- (Optional) Strapi Cloud account or local Strapi instance for the CMS
+
+Add a note about the Node version in package.json `engines` or a `.nvmrc` file if you want to be specific.
+
+---
+
 ## ⚙️ Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file in the root directory (do NOT commit `.env`). Add a `.env.example` to show required variables.
+
+Example `.env`:
 
 ```env
-VITE_STRAPI_API_URL=your_strapi_api_url
-VITE_STRAPI_API_TOKEN=your_api_token
+VITE_STRAPI_API_URL=https://your-strapi-instance-url
+VITE_STRAPI_API_TOKEN=your_strapi_api_token
 ```
+
+Notes:
+- For Vite, environment variables that should be exposed to client-side code must start with `VITE_`.
+- If you run Strapi locally, point `VITE_STRAPI_API_URL` to your local Strapi URL (e.g., `http://localhost:1337`).
 
 ---
 
 ## 🚀 Getting Started
 
-### 1️⃣ Clone the repository
+1. Clone the repository
 
 ```bash
 git clone https://github.com/AmrendraCodes/aktechblog.git
 cd aktechblog
 ```
 
-### 2️⃣ Install dependencies
+2. Install dependencies
 
 ```bash
 npm install
+# or
+yarn
 ```
 
-### 3️⃣ Start development server
+3. Add environment variables
+
+- Copy `.env.example` to `.env` and set values.
+
+4. Start development server
 
 ```bash
 npm run dev
+# or
+yarn dev
+```
+
+5. Build for production
+
+```bash
+npm run build
+# or
+yarn build
 ```
 
 ---
 
-## 📖 About Page
+## About Page & Vision
 
-The **About section** explains the vision of the blog — sharing knowledge, deep dives, and practical guides written **by developers, for developers**.
+This blog is about sharing knowledge — deep dives and practical guides written by developers, for developers. The About page explains the project's vision and goals.
 
 ---
 
+## Real-World Challenges & Debugging Experience
 
-##Real-World Challenges & Debugging Experience
+This project provided hands-on experience with production-level issues while integrating a React frontend with Strapi Cloud CMS:
 
-## 🧩 Real-World Challenges & Debugging Experience
+- Initially designed UI, then migrated to React and continued development.
+- Deployed on Vercel and integrated with Strapi.
+- Troubleshot Strapi integration failures by debugging API calls and CMS configuration.
+- Fixed delayed rendering caused by inefficient API queries and missing pagination.
+- Optimized usage of Strapi `populate` to avoid performance regressions.
+- Resolved `400` errors by correctly managing environment variables and regenerating API tokens.
+- Used browser DevTools (Network & Console) to trace caching and rendering issues.
+- Fixed role/permission mismatches (e.g., wrong field names like `featureimage` vs `cover`) and updated code accordingly.
 
-This project helped me gain hands-on experience with real production-level issues while integrating a frontend with Strapi Cloud CMS.
-
-- Designed the initial UI using a custom method, then imported the project into GitHub and continued development using VS Code and an AI-assisted code editor.
-- Redesigned the Home page and sub-pages using React after the initial setup.
-- Deployed the project on Vercel and integrated it with Strapi Cloud CMS.
-- Faced initial Strapi integration failures and resolved them by debugging API calls and CMS configuration.
-- Fixed delayed blog rendering issues caused by inefficient API queries and missing pagination logic.
-- Identified performance issues caused by using `populate=*` and optimized the populate strategy.
-- Debugged missing content issues that occurred after populate changes.
-- Resolved `400` API errors by correctly setting up environment variables and adding a secure API token.
-- Regenerated and configured Strapi API tokens from the admin panel to restore data access.
-- Implemented SEO improvements using React Helmet and debugged blank-screen issues caused by misconfiguration.
-- Debugged role-based permission issues in Strapi where incorrect field access (`featureimage` instead of `cover`) caused data mismatch.
-- Resolved blank page and buffering issues where data was fetched, but React routing failed to re-render correctly.
-- Fixed image rendering issues where outdated API attributes were returning stale data by correcting attribute paths.
-- Actively used browser DevTools (Network & Console) to trace API responses, caching issues, and rendering bugs.
-
+---
 
 ## 🛠️ Future Improvements
 
-* 🔐 Authentication (Admin / Author)
-* 🗂️ Blog pagination
-* 🏷️ Tags & advanced filters
-* 💬 Comments system
-* 📈 SEO optimization
+- 🔐 Authentication (Admin / Author)
+- 🗂️ Blog pagination
+- 🏷️ Tags & advanced filters
+- 💬 Comments system (e.g., Disqus, Commento, or custom)
+- 📈 SEO optimization (structured data, sitemap, meta tags)
+- 🔁 CI/CD (tests, linting, previews)
+- ♿ Accessibility improvements & performance tuning
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to fork this repo and submit a pull request.
+Contributions are welcome! Suggested additions:
+- Add a `CONTRIBUTING.md` with contribution workflow and PR template
+- Add a `CODE_OF_CONDUCT.md`
+- Provide `ISSUE_TEMPLATE` and `PULL_REQUEST_TEMPLATE` files
+- Add `.env.example` showing required environment variables
+
+Steps to contribute:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes, add tests where applicable
+4. Open a pull request describing the change
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file.
 
 ---
 
 ## 🙋‍♂️ Author
 
-**Amrendra Kumar**
-Frontend Developer | Tech Enthusiast
+**Amrendra Kumar**  
+Frontend Developer | Tech Enthusiast  
 GitHub: [@AmrendraCodes](https://github.com/AmrendraCodes)
 
 ---
 
-⭐ If you like this project, don’t forget to **star the repository**!
+If you like this project, don’t forget to star the repository!
