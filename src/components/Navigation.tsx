@@ -31,7 +31,7 @@ const Navigation = () => {
       label: "Home"
     },
     {
-      href: "/articles",  // ✅ Fix: Changed from "/blog" to "/articles"
+      href: "/blog",  // ✅ Fix: Changed from "/blog" to "/articles"
       label: "Blog"
     },
     {
