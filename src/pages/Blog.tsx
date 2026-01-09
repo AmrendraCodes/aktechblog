@@ -1,4 +1,4 @@
-import { ArticlesList } from '../components/ArticlesList'
+import ArticlesList from '../components/ArticlesList'
 
 const Blog = () => {
   return (
