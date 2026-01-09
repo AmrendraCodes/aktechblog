@@ -188,17 +188,29 @@ const AboutInteractive = () => {
       </section>
 
       {/* Quick Links */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-6">
-          <Link to="/" className="p-6 bg-white rounded-xl shadow text-center">
-            <Home className="mx-auto mb-3" />
-            Home
-          </Link>
+     <section className="py-16 px-4">
+  <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-6">
+    <Link to="/" className="p-6 bg-white rounded-xl shadow text-center">
+      <Home className="mx-auto mb-3" />
+      Home
+    </Link>
 
-          <Link to="/blog" className="p-6 bg-white rounded-xl shadow text-center">
-            <FileText className="mx-auto mb-3" />
-            Blog
-          </Link>
+    <Link to="/blog" className="p-6 bg-white rounded-xl shadow text-center">
+      <FileText className="mx-auto mb-3" />
+      Blog
+    </Link>
 
-          <Link to="/contact" className="p-6 bg-white rounded-xl shadow text-center">
-            <
+    <Link to="/contact" className="p-6 bg-white rounded-xl shadow text-center">
+      <Mail className="mx-auto mb-3" />
+      Contact
+    </Link>
+
+    <Link
+      to="/privacy-policy"
+      className="p-6 bg-white rounded-xl shadow text-center"
+    >
+      <Users className="mx-auto mb-3" />
+      Privacy
+    </Link>
+  </div>
+</section>
