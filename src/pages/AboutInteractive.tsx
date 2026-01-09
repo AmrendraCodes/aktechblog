@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 
 const AboutInteractive = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const [hoveredTimeline, setHoveredTimeline] = useState<number | null>(null);
   const [typewriterText, setTypewriterText] = useState("");
@@ -37,15 +36,6 @@ const AboutInteractive = () => {
     }, 500);
     return () => clearInterval(cursorTimer);
   }, []);
-
-  // Theme toggle
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
 
   const scrollToJourney = () => {
     journeyRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -102,39 +92,7 @@ const AboutInteractive = () => {
     }
   ];
 
-  return (
-    <Layout>
-      {/* Theme Toggle Button */}
-      <motion.button
-        onClick={() => setIsDarkMode(!isDarkMode)}
-        className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <AnimatePresence mode="wait">
-          {isDarkMode ? (
-            <motion.div
-              key="moon"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Moon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="sun"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Sun className="h-5 w-5 text-yellow-500" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.button>
+  
 
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
