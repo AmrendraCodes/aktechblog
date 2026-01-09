@@ -1,73 +1,215 @@
-# Welcome to your Lovable project
+# AK Tech Blog 🚀
 
-## Project info
+[Live Preview](https://aktechblog.vercel.app/) • [GitHub Repo](https://github.com/AmrendraCodes/aktechblog)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+A modern tech blog website with a clean UI, dark mode, and CMS-driven content. The project focuses on web development, AI, cloud, and other modern web topics.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## Table of Contents
 
-**Use Lovable**
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Environment Variables](#environment-variables)
+- [Getting Started](#getting-started)
+- [About Page & Vision](#about-page--vision)
+- [Real-World Challenges & Debugging Experience](#real-world-challenges--debugging-experience)
+- [Future Improvements](#future-improvements)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## Screenshots
 
-**Use your preferred IDE**
+Replace these with your repository images or a `screenshots/` folder for better control.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Home Page
+![Home page screenshot](https://github.com/user-attachments/assets/17835f94-38b5-456f-b289-e22856d71eeb)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Blog Page
+![Blog page screenshot](https://github.com/user-attachments/assets/2678b955-1793-4c8f-9975-92fff0cff1cb)
 
-Follow these steps:
+### About Page
+![About page screenshot](https://github.com/user-attachments/assets/32c7134a-6c02-4e0d-b3c8-8c36549d1e52)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## ✨ Features
 
-# Step 3: Install the necessary dependencies.
-npm i
+- ⚡ Modern UI with gradient hero section
+- 🌙 Dark mode support
+- 📝 Blog listing with categories
+- 🔍 Search functionality for blogs
+- 📅 Blog metadata (date & read time)
+- 📱 Fully responsive design
+- 🔗 Dedicated pages: Home, Blog, About, Contact
+- 🧩 CMS-ready architecture (Strapi-friendly)
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+---
+
+## 🧑‍💻 Tech Stack
+
+- Frontend: HTML, CSS, JavaScript
+- Framework: React + Vite
+- Styling: Tailwind CSS (or custom CSS)
+- CMS: Strapi (Headless CMS)
+- Deployment: Vercel
+
+---
+
+## 📂 Project Structure
+
+```
+aktechblog/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   │   ├── Home/
+│   │   ├── Blog/
+│   │   ├── About/
+│   │   └── Contact/
+│   ├── assets/
+│   └── utils/
+├── .env
+├── package.json
+└── README.md
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Prerequisites
 
-**Use GitHub Codespaces**
+- Node.js (recommend LTS, e.g. 18+)
+- npm or yarn
+- (Optional) Strapi Cloud account or local Strapi instance for the CMS
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Add a note about the Node version in package.json `engines` or a `.nvmrc` file if you want to be specific.
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## ⚙️ Environment Variables
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Create a `.env` file in the root directory (do NOT commit `.env`). Add a `.env.example` to show required variables.
 
-## How can I deploy this project?
+Example `.env`:
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```env
+VITE_STRAPI_API_URL=https://your-strapi-instance-url
+VITE_STRAPI_API_TOKEN=your_strapi_api_token
+```
 
-## Can I connect a custom domain to my Lovable project?
+Notes:
+- For Vite, environment variables that should be exposed to client-side code must start with `VITE_`.
+- If you run Strapi locally, point `VITE_STRAPI_API_URL` to your local Strapi URL (e.g., `http://localhost:1337`).
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🚀 Getting Started
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. Clone the repository
+
+```bash
+git clone https://github.com/AmrendraCodes/aktechblog.git
+cd aktechblog
+```
+
+2. Install dependencies
+
+```bash
+npm install
+# or
+yarn
+```
+
+3. Add environment variables
+
+- Copy `.env.example` to `.env` and set values.
+
+4. Start development server
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+5. Build for production
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+---
+
+## About Page & Vision
+
+This blog is about sharing knowledge — deep dives and practical guides written by developers, for developers. The About page explains the project's vision and goals.
+
+---
+
+## Real-World Challenges & Debugging Experience
+
+This project provided hands-on experience with production-level issues while integrating a React frontend with Strapi Cloud CMS:
+
+- Initially designed UI, then migrated to React and continued development.
+- Deployed on Vercel and integrated with Strapi.
+- Troubleshot Strapi integration failures by debugging API calls and CMS configuration.
+- Fixed delayed rendering caused by inefficient API queries and missing pagination.
+- Optimized usage of Strapi `populate` to avoid performance regressions.
+- Resolved `400` errors by correctly managing environment variables and regenerating API tokens.
+- Used browser DevTools (Network & Console) to trace caching and rendering issues.
+- Fixed role/permission mismatches (e.g., wrong field names like `featureimage` vs `cover`) and updated code accordingly.
+
+---
+
+## 🛠️ Future Improvements
+
+- 🔐 Authentication (Admin / Author)
+- 🗂️ Blog pagination
+- 🏷️ Tags & advanced filters
+- 💬 Comments system (e.g., Disqus, Commento, or custom)
+- 📈 SEO optimization (structured data, sitemap, meta tags)
+- 🔁 CI/CD (tests, linting, previews)
+- ♿ Accessibility improvements & performance tuning
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Suggested additions:
+- Add a `CONTRIBUTING.md` with contribution workflow and PR template
+- Add a `CODE_OF_CONDUCT.md`
+- Provide `ISSUE_TEMPLATE` and `PULL_REQUEST_TEMPLATE` files
+- Add `.env.example` showing required environment variables
+
+Steps to contribute:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes, add tests where applicable
+4. Open a pull request describing the change
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file.
+
+---
+
+## 🙋‍♂️ Author
+
+**Amrendra Kumar**  
+Frontend Developer | Tech Enthusiast  
+GitHub: [@AmrendraCodes](https://github.com/AmrendraCodes)
+
+---
+
+If you like this project, don’t forget to star the repository!
