@@ -30,7 +30,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
 
           {/* Blog List */}
-          <Route path="/articles" element={<Blog />} />
+          <Route path="/Blog" element={<Blog />} />
 
           {/* Blog Detail (MUST be before *) */}
           <Route path="/blog/:slug" element={<BlogDetail />} />
