@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchArticles } from "../utils/smartApi";
 
-const ArticlesList = () => {
+const ArticlesList: React.FC = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [timeoutReached, setTimeoutReached] = useState(false);
   const [initialFetchComplete, setInitialFetchComplete] = useState(false);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const ArticlesList = () => {
             setArticles([]);
           }
           setLoading(false);
+          setTimeoutReached(false);
           setInitialFetchComplete(true);
         }
       } catch (err) {
@@ -43,8 +45,8 @@ const ArticlesList = () => {
     };
   }, []);
 
-  // Loading State
-  if (loading) {
+  // Show skeleton if loading
+  if (loading && !timeoutReached) {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
@@ -67,7 +69,23 @@ const ArticlesList = () => {
     );
   }
 
-  // Error State
+  // Show timeout state if loading exceeds 1.5 seconds
+  if (loading && timeoutReached) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
+          <p className="text-gray-600">Taking longer than expected...</p>
+        </div>
+        <div className="text-center py-24">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Still loading articles...</p>
+        </div>
+      </div>
+    );
+  }
+
+  /* -------------------- Error State -------------------- */
   if (error) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -87,7 +105,7 @@ const ArticlesList = () => {
     );
   }
 
-  // Empty State
+  /* -------------------- Empty State -------------------- */
   if (!loading && !error && articles.length === 0 && initialFetchComplete) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -103,7 +121,8 @@ const ArticlesList = () => {
     );
   }
 
-  // Articles Grid
+
+  /* -------------------- Articles Grid -------------------- */
   if (!loading && articles.length > 0) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -126,7 +145,7 @@ const ArticlesList = () => {
                 {imageUrl ? (
                   <img
                     src={imageUrl}
-                    alt={article.title}
+                    alt={article.attributes?.title}
                     loading="lazy"
                     className="w-full h-48 object-cover"
                   />
