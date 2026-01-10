@@ -1,52 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { fetchArticles } from "../utils/smartApi";
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { fetchArticles } from '../utils/smartApi'
 
-const ArticlesList: React.FC = () => {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [timeoutReached, setTimeoutReached] = useState(false);
-  const [initialFetchComplete, setInitialFetchComplete] = useState(false);
+const ArticlesList = () => {
+  const [articles, setArticles] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [hasFetched, setHasFetched] = useState(false)
 
   useEffect(() => {
-    let isMounted = true;
     const loadArticles = async () => {
       try {
-        const result = await fetchArticles({ page: 1, pageSize: 6 });
-        console.log('Articles fetched:', result);
-
-        if (isMounted) {
-          if (result.success && result.articles) {
-            setArticles(result.articles);
-          } else if (Array.isArray(result.articles)) {
-            setArticles(result.articles);
-          } else {
-            setArticles([]);
-          }
-          setLoading(false);
-          setTimeoutReached(false);
-          setInitialFetchComplete(true);
+        setLoading(true)
+        setError(null)
+        
+        const result = await fetchArticles({ page: 1, pageSize: 6 })
+        
+        if (result && result.success) {
+          setArticles(result.articles || [])
+          setHasFetched(true)
+        } else {
+          throw new Error('Failed to load articles')
         }
       } catch (err) {
-        console.error('Error fetching articles:', err);
-        if (isMounted) {
-          setError(err.message || "Failed to load articles");
-          setLoading(false);
-          setInitialFetchComplete(true);
-        }
+        setError(err.message || 'Failed to load articles')
+        setHasFetched(true)
+      } finally {
+        setLoading(false)
       }
-    };
+    }
 
-    loadArticles();
+    loadArticles()
+  }, [])
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const formatDate = (dateString) => {
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      })
+    } catch {
+      return 'Recently'
+    }
+  }
 
-  // Show skeleton if loading
-  if (loading && !timeoutReached) {
+  if (loading) {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
@@ -66,26 +66,9 @@ const ArticlesList: React.FC = () => {
           ))}
         </div>
       </div>
-    );
+    )
   }
 
-  // Show timeout state if loading exceeds 1.5 seconds
-  if (loading && timeoutReached) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
-          <p className="text-gray-600">Taking longer than expected...</p>
-        </div>
-        <div className="text-center py-24">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Still loading articles...</p>
-        </div>
-      </div>
-    );
-  }
-
-  /* -------------------- Error State -------------------- */
   if (error) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -102,11 +85,10 @@ const ArticlesList: React.FC = () => {
           </button>
         </div>
       </div>
-    );
+    )
   }
 
-  /* -------------------- Empty State -------------------- */
-  if (!loading && !error && articles.length === 0 && initialFetchComplete) {
+  if (hasFetched && articles.length === 0) {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="text-center py-24">
@@ -118,72 +100,66 @@ const ArticlesList: React.FC = () => {
           </p>
         </div>
       </div>
-    );
+    )
   }
 
-
-  /* -------------------- Articles Grid -------------------- */
-  if (!loading && articles.length > 0) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
-          <p className="text-gray-600">
-            Showing {Array.isArray(articles) ? articles.length : 0} articles
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {Array.isArray(articles) && articles.map((article) => {
-            const imageUrl = article.image || null;
-
-            return (
-              <div
-                key={article.id}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden"
-              >
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt={article.attributes?.title}
-                    loading="lazy"
-                    className="w-full h-48 object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
-                    No image
-                  </div>
-                )}
-
-                <div className="p-6">
-                  <p className="text-sm text-gray-400 mb-2">
-                    {new Date(article.publishedAt).toLocaleDateString()}
-                  </p>
-
-                  <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
-                    {article.title}
-                  </h3>
-
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {article.description}
-                  </p>
-
-                  <Link
-                    to={`/blog/${article.slug}`}
-                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800"
-                  >
-                    Read More →
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
+        <p className="text-gray-600">
+          Showing {Array.isArray(articles) ? articles.length : 0} articles
+        </p>
       </div>
-    );
-  }
 
-  return null;
-};
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {Array.isArray(articles) && articles.map((article) => {
+          const imageUrl = article.image || null
 
-export default ArticlesList;
+          return (
+            <div
+              key={article.id}
+              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden"
+            >
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt={article.title}
+                  loading="lazy"
+                  className="w-full h-48 object-cover"
+                />
+              ) : (
+                <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
+                  No image
+                </div>
+              )}
+
+              <div className="p-6">
+                <p className="text-sm text-gray-400 mb-2">
+                  {new Date(article.publishedAt).toLocaleDateString()}
+                </p>
+
+                <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
+                  {article.title}
+                </h3>
+
+                <p className="text-gray-600 mb-4 line-clamp-3">
+                  {article.description}
+                </p>
+
+                <Link
+                  to={`/blog/${article.slug}`}
+                  className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800"
+                >
+                  Read More →
+                </Link>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default ArticlesList
