@@ -1,8 +1,10 @@
 import ArticlesList from '../components/ArticlesList'
+import { Link } from 'react-router-dom';
 
 const Blog = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+
       {/* Beautiful Hero Section */}
       <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
@@ -10,18 +12,31 @@ const Blog = () => {
         
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
           <div className="text-center max-w-4xl mx-auto">
+
+            {/* Breadcrumb */}
+            <div className="flex justify-center items-center gap-2 text-sm text-blue-200 mb-4">
+              <Link to="/" className="hover:text-white transition">
+                Home
+              </Link>
+              <span>/</span>
+              <span className="text-white font-medium">Blog</span>
+            </div>
+
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 sm:mb-6 tracking-tight">
               Our Blog
             </h1>
+
             <p className="text-lg sm:text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
               Insights, tutorials, and stories from our team
             </p>
+
           </div>
         </div>
       </div>
 
       {/* Use ArticlesList Component */}
       <ArticlesList />
+
     </div>
   )
 }
