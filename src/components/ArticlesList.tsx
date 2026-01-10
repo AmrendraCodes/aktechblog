@@ -162,4 +162,4 @@ const ArticlesList = () => {
   )
 }
 
-export default ArticlesList
+export default ArticlesList;
