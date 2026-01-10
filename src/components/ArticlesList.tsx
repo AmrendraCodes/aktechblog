@@ -1,126 +1,170 @@
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { fetchArticles } from "../utils/smartApi";
 
-export const ArticlesList = () => {
-  const articles = [
-    { 
-      id: 1, 
-      title: 'Getting Started with React', 
-      description: 'Learn the basics of React and start building modern web applications.',
-      date: '2024-01-15',
-      category: 'React'
-    },
-    { 
-      id: 2, 
-      title: 'TypeScript Best Practices', 
-      description: 'Discover the best practices for writing clean and maintainable TypeScript code.',
-      date: '2024-01-10',
-      category: 'TypeScript'
-    },
-    { 
-      id: 3, 
-      title: 'Building REST APIs', 
-      description: 'A comprehensive guide to building scalable REST APIs with Node.js.',
-      date: '2024-01-05',
-      category: 'Backend'
-    },
-  ]
+const ArticlesList = () => {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [initialFetchComplete, setInitialFetchComplete] = useState(false);
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* Breadcrumb */}
-        <nav className="flex mb-8" aria-label="Breadcrumb">
-          <ol className="inline-flex items-center space-x-1 md:space-x-3">
-            <li className="inline-flex items-center">
-              <Link 
-                to="/" 
-                className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
-              >
-                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                </svg>
-                Home
-              </Link>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
-                </svg>
-                <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2">Blog</span>
+  useEffect(() => {
+    let isMounted = true;
+    const loadArticles = async () => {
+      try {
+        const result = await fetchArticles({ page: 1, pageSize: 6 });
+        console.log('Articles fetched:', result);
+
+        if (isMounted) {
+          if (result.success && result.articles) {
+            setArticles(result.articles);
+          } else if (Array.isArray(result.articles)) {
+            setArticles(result.articles);
+          } else {
+            setArticles([]);
+          }
+          setLoading(false);
+          setInitialFetchComplete(true);
+        }
+      } catch (err) {
+        console.error('Error fetching articles:', err);
+        if (isMounted) {
+          setError(err.message || "Failed to load articles");
+          setLoading(false);
+          setInitialFetchComplete(true);
+        }
+      }
+    };
+
+    loadArticles();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Loading State
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
+          <p className="text-gray-600">Loading articles...</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3, 4, 5, 6].map((skeleton) => (
+            <div key={skeleton} className="bg-white rounded-xl shadow-md overflow-hidden">
+              <div className="w-full h-48 bg-gray-200 animate-pulse"></div>
+              <div className="p-6">
+                <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
+                <div className="h-6 bg-gray-200 rounded animate-pulse mb-3"></div>
+                <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
               </div>
-            </li>
-          </ol>
-        </nav>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Blog Articles
-          </h1>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Explore our collection of articles on web development, programming, and technology.
+  // Error State
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-2xl mx-auto my-12 p-6 bg-red-50 border border-red-200 rounded-lg text-center">
+          <h2 className="text-xl font-bold text-red-600 mb-2">
+            Error loading articles
+          </h2>
+          <p className="text-red-700">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Empty State
+  if (!loading && !error && articles.length === 0 && initialFetchComplete) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center py-24">
+          <h2 className="text-3xl font-bold text-gray-700">
+            No articles found
+          </h2>
+          <p className="text-gray-500 mt-2">
+            Please check back later.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Articles Grid
+  if (!loading && articles.length > 0) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
+          <p className="text-gray-600">
+            Showing {Array.isArray(articles) ? articles.length : 0} articles
           </p>
         </div>
 
-        {/* Articles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {articles.map(article => (
-            <article 
-              key={article.id}
-              className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col h-full"
-            >
-              {/* Category Badge */}
-              <div className="px-6 pt-6">
-                <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
-                  {article.category}
-                </span>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {Array.isArray(articles) && articles.map((article) => {
+            const imageUrl = article.image || null;
 
-              {/* Content */}
-              <div className="px-6 py-4 flex-grow">
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors">
-                  {article.title}
-                </h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  {article.description}
-                </p>
-              </div>
+            return (
+              <div
+                key={article.id}
+                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden"
+              >
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt={article.title}
+                    loading="lazy"
+                    className="w-full h-48 object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
+                    No image
+                  </div>
+                )}
 
-              {/* Footer */}
-              <div className="px-6 pb-6 pt-4 border-t border-gray-100">
-                <div className="flex items-center justify-between">
-                  <time className="text-sm text-gray-500">
-                    {new Date(article.date).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric'
-                    })}
-                  </time>
-                  <Link 
-                    to={`/blog/${article.id}`}
-                    className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center"
+                <div className="p-6">
+                  <p className="text-sm text-gray-400 mb-2">
+                    {new Date(article.publishedAt).toLocaleDateString()}
+                  </p>
+
+                  <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
+                    {article.title}
+                  </h3>
+
+                  <p className="text-gray-600 mb-4 line-clamp-3">
+                    {article.description}
+                  </p>
+
+                  <Link
+                    to={`/blog/${article.slug}`}
+                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800"
                   >
-                    Read More
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    Read More →
                   </Link>
                 </div>
               </div>
-            </article>
-          ))}
+            );
+          })}
         </div>
-
-        {/* Empty State (if no articles) */}
-        {articles.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No articles found.</p>
-          </div>
-        )}
       </div>
-    </div>
-  )
-}
+    );
+  }
+
+  return null;
+};
+
+export default ArticlesList;
