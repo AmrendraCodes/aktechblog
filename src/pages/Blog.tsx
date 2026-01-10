@@ -1,4 +1,3 @@
-import ArticlesList from '../components/ArticlesList'
 
 const Blog = () => {
   return (
