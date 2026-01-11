@@ -46,6 +46,12 @@ const staticUrls = [
  */
 async function fetchBlogPosts() {
   try {
+    if (process.env.SKIP_API === "true") {
+  console.log("Skipping Strapi API fetch during build...");
+  return [];
+}
+
+    
     console.log('🔍 Fetching blog posts from Strapi...');
     
     const response = await fetch(
