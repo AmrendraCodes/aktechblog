@@ -8,10 +8,9 @@ import { DynamicNewsletter } from "../components/DynamicNewsletter";
 import { useArticles } from "../hooks/useArticles";
 
 const Index = () => {
-  // Use optimized React Query hook
-  const { data, isLoading, error } = useArticles(1, 6);
-  
-  const items = data?.articles || [];
+  const { articles, isLoading, error } = useArticles(1, 6);
+
+  const items = articles || [];
   const featuredPosts = items.slice(0, 2);
   const recentPosts = items.slice(0, 6);
 

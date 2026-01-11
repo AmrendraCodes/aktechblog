@@ -1,59 +1,31 @@
-import { Article } from '../types/article';
+// src/services/strapi.js
 
-const STRAPI_URL = import.meta.env.VITE_STRAPI_URL;
+import axios from 'axios';
 
-interface StrapiResponse {
-  data: Article[];
-  meta: {
-    pagination: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
-  };
-}
+const API_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337';
 
-export const getArticles = async (): Promise<Article[]> => {
-  try {
-    if (!STRAPI_URL) {
-      throw new Error('VITE_STRAPI_URL is not defined in environment variables');
+export const strapiService = {
+  // Get all articles
+  getArticles: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/articles?populate=*`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      throw error;
     }
+  },
 
-    const params = new URLSearchParams({
-      'fields[0]': 'title',
-      'fields[1]': 'slug',
-      'fields[2]': 'description',
-      'fields[3]': 'publishedAt',
-      'fields[4]': 'hasFeaturedImage',
-
-      // ✅ THIS IS THE KEY FIX - Properly populate cover with all formats
-      'populate[cover]': 'true',
-
-      'sort[0]': 'publishedAt:desc',
-      'pagination[page]': '1',
-      'pagination[pageSize]': '6',
-      'publicationState': 'live'
-    });
-
-    const response = await fetch(
-      `${STRAPI_URL}/api/articles?${params.toString()}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+  // Get article by slug
+  getArticleBySlug: async (slug) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/api/articles?filters[slug][$eq]=${slug}&populate=*`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching article by slug:', error);
+      throw error;
     }
-
-    const data: StrapiResponse = await response.json();
-    return (data?.data || []).filter(article => article != null);
-  } catch (error) {
-    console.error('Error fetching articles from Strapi:', error);
-    throw error;
-  }
+  },
 };

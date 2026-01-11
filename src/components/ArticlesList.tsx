@@ -1,165 +1,71 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { fetchArticles } from '../utils/smartApi'
+import { useEffect, useState } from "react";
+import { strapiService } from "../services/strapi"; // 
+import { Link } from "react-router-dom";
 
 const ArticlesList = () => {
-  const [articles, setArticles] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [hasFetched, setHasFetched] = useState(false)
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadArticles = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-        
-        const result = await fetchArticles({ page: 1, pageSize: 6 })
-        
-        if (result && result.success) {
-          setArticles(result.articles || [])
-          setHasFetched(true)
-        } else {
-          throw new Error('Failed to load articles')
-        }
-      } catch (err) {
-        setError(err.message || 'Failed to load articles')
-        setHasFetched(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadArticles()
-  }, [])
-
-  const formatDate = (dateString) => {
-    try {
-      const date = new Date(dateString)
-      return date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+    strapiService
+      .getArticles() // ✅ Use strapiService
+      .then((res) => {
+        setArticles(res.data || []); // ✅ Access res.data
+        setLoading(false);
       })
-    } catch {
-      return 'Recently'
-    }
-  }
+      .catch((error) => {
+        console.error("Error loading articles:", error);
+        setLoading(false);
+      });
+  }, []);
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
-          <p className="text-gray-600">Loading articles...</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3, 4, 5, 6].map((skeleton) => (
-            <div key={skeleton} className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="w-full h-48 bg-gray-200 animate-pulse"></div>
-              <div className="p-6">
-                <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-                <div className="h-6 bg-gray-200 rounded animate-pulse mb-3"></div>
-                <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="container mx-auto px-4 py-12 text-center">
+        <p>Loading articles...</p>
       </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-2xl mx-auto my-12 p-6 bg-red-50 border border-red-200 rounded-lg text-center">
-          <h2 className="text-xl font-bold text-red-600 mb-2">
-            Error loading articles
-          </h2>
-          <p className="text-red-700">{error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  if (hasFetched && articles.length === 0) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center py-24">
-          <h2 className="text-3xl font-bold text-gray-700">
-            No articles found
-          </h2>
-          <p className="text-gray-500 mt-2">
-            Please check back later.
-          </p>
-        </div>
-      </div>
-    )
+    );
   }
 
   return (
     <div className="container mx-auto px-4 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-3">Latest Articles</h1>
-        <p className="text-gray-600">
-          Showing {Array.isArray(articles) ? articles.length : 0} articles
-        </p>
-      </div>
+      <h1 className="text-4xl font-bold mb-8 text-center">Latest Articles</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {Array.isArray(articles) && articles.map((article) => {
-          const imageUrl = article.image || null
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {articles.map((article) => {
+          const image =
+            article.cover?.data?.attributes?.url
+              ? `http://localhost:1337${article.cover.data.attributes.url}`
+              : null;
 
           return (
-            <div
-              key={article.id}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden"
-            >
-              {imageUrl ? (
+            <div key={article.id} className="bg-white shadow rounded overflow-hidden">
+              {image && (
                 <img
-                  src={imageUrl}
-                  alt={article.title}
-                  loading="lazy"
+                  src={image}
+                  alt={article.Title}
                   className="w-full h-48 object-cover"
                 />
-              ) : (
-                <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
-                  No image
-                </div>
               )}
 
-              <div className="p-6">
-                <p className="text-sm text-gray-400 mb-2">
-                  {new Date(article.publishedAt).toLocaleDateString()}
-                </p>
-
-                <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
-                  {article.title}
+              <div className="p-4">
+                <h3 className="font-bold text-lg">
+                  {article.Title}
                 </h3>
-
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  {article.description}
-                </p>
 
                 <Link
                   to={`/blog/${article.slug}`}
-                  className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800"
+                  className="text-blue-600 font-semibold"
                 >
                   Read More →
                 </Link>
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ArticlesList;

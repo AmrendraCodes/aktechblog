@@ -1,21 +1,21 @@
 export default [
+  'strapi::logger',
   'strapi::errors',
   'strapi::security',
   {
     name: 'strapi::cors',
     config: {
-      origin: [
-        'http://localhost:3000',
-        'http://localhost:5173',   // 🔥 ADD THIS
-        'https://aktechblog.vercel.app'
-      ],
+      enabled: true,
       headers: '*',
-      methods: ['GET','POST','PUT','PATCH','DELETE','HEAD','OPTIONS'],
-      credentials: true,
+      origin: [
+        'http://localhost:8080',   // ✅ Aapka frontend port
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'http://127.0.0.1:8080',
+      ],
     },
   },
   'strapi::poweredBy',
-  'strapi::logger',
   'strapi::query',
   'strapi::body',
   'strapi::session',

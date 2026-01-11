@@ -1,8 +1,7 @@
-// Smart API - Works both locally and on Vercel
 import axios from "axios";
 
-// Strapi base URL
-const STRAPI_BASE_URL = "https://genuine-fun-ae6ecdb902.strapiapp.com/api";
+// 🔥 Local Strapi URL
+const STRAPI_BASE_URL = "http://localhost:1337/api";
 
 // Axios instance
 const api = axios.create({
@@ -19,24 +18,17 @@ export const smartApi = {
   /* -------------------------------------------------- */
   async getArticles(page = 1, pageSize = 6) {
     try {
-      const apiToken = import.meta.env.VITE_STRAPI_API_TOKEN;
-
       const params = new URLSearchParams({
-        populate: "cover",
-        sort: "publishedAt:desc",
+        "populate": "*",
+        "sort[0]": "publishedAt:desc",
         "pagination[page]": page.toString(),
         "pagination[pageSize]": pageSize.toString(),
-        publicationState: "live",
       });
 
-      const response = await api.get(`/articles?${params.toString()}`, {
-        headers: apiToken
-          ? { Authorization: `Bearer ${apiToken}` }
-          : {},
-      });
+      const response = await api.get(`/articles?${params.toString()}`);
 
       const transformed = response.data.data.map((item) => {
-        const cover = item.cover || null;
+        const cover = item.cover?.data?.attributes || null;
 
         const image =
           cover?.formats?.medium?.url ||
@@ -46,12 +38,11 @@ export const smartApi = {
 
         return {
           id: item.id,
-          title: item.title,
+          title: item.Title,       // ✅ Capital T (Strapi field)
           slug: item.slug,
-          description: item.description,
-          publishedAt: item.publishedAt,
+          content: item.content,
           cover,
-          image,
+          image: image ? `http://localhost:1337${image}` : null,
         };
       });
 
@@ -75,26 +66,19 @@ export const smartApi = {
   /* -------------------------------------------------- */
   async getArticleBySlug(slug) {
     try {
-      const apiToken = import.meta.env.VITE_STRAPI_API_TOKEN;
-
       const params = new URLSearchParams({
         "filters[slug][$eq]": slug,
-        populate: "cover",
-        publicationState: "live",
+        "populate": "*",
       });
 
-      const response = await api.get(`/articles?${params.toString()}`, {
-        headers: apiToken
-          ? { Authorization: `Bearer ${apiToken}` }
-          : {},
-      });
+      const response = await api.get(`/articles?${params.toString()}`);
 
       if (!response.data.data.length) {
         return { success: false, article: null };
       }
 
       const item = response.data.data[0];
-      const cover = item.cover || null;
+      const cover = item.cover?.data?.attributes || null;
 
       const image =
         cover?.formats?.large?.url ||
@@ -106,12 +90,11 @@ export const smartApi = {
         success: true,
         article: {
           id: item.id,
-          title: item.title,
+          title: item.Title,
           slug: item.slug,
-          description: item.description,
-          publishedAt: item.publishedAt,
+          content: item.content,
           cover,
-          image,
+          image: image ? `http://localhost:1337${image}` : null,
         },
       };
     } catch (error) {

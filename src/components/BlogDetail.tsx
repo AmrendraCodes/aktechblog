@@ -1,45 +1,79 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Article } from "../types/article";
 
-const STRAPI_URL = import.meta.env.VITE_STRAPI_URL;
+const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337';
+
+interface StrapiImage {
+  url: string;
+  formats?: {
+    medium?: { url: string };
+    small?: { url: string };
+    thumbnail?: { url: string };
+  };
+}
+
+interface ArticleData {
+  id: number;
+  attributes: {
+    Title: string;         // ✅ Capital T
+    slug: string;
+    content?: string;
+    description?: string;
+    publishedAt: string;
+    cover?: {
+      data?: {
+        attributes: StrapiImage;
+      };
+    };
+  };
+}
 
 const getImageUrl = (url?: string): string | null => {
   if (!url) return null;
-  // If URL is already absolute (starts with http), return as is
   if (url.startsWith('http')) return url;
-  // Otherwise, prepend the Strapi base URL
   return `${STRAPI_URL}${url}`;
 };
 
 const BlogDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [article, setArticle] = useState<Article | null>(null);
+  const [article, setArticle] = useState<ArticleData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
+        if (!STRAPI_URL) {
+          throw new Error('STRAPI_URL not configured');
+        }
+
         const res = await fetch(
-          `${STRAPI_URL}/api/articles?filters[slug][$eq]=${slug}&populate=cover` 
+          `${STRAPI_URL}/api/articles?filters[slug][$eq]=${slug}&populate=cover`
         );
 
         if (!res.ok) {
-          throw new Error("Failed to fetch article");
+          throw new Error(`Failed to fetch article: ${res.status}`);
         }
 
         const json = await res.json();
         const articleData = json?.data?.[0];
-        setArticle(articleData || null);
+        
+        if (!articleData) {
+          throw new Error('Article not found');
+        }
+        
+        setArticle(articleData);
       } catch (err) {
+        console.error('Error fetching article:', err);
         setError(err instanceof Error ? err.message : "Something went wrong");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchArticle();
+    if (slug) {
+      fetchArticle();
+    }
   }, [slug]);
 
   /* -------------------- Loading -------------------- */
@@ -83,46 +117,50 @@ const BlogDetail = () => {
     );
   }
 
+  // ✅ Access image correctly from Strapi v4 structure
+  const coverData = article.attributes.cover?.data?.attributes;
   const imageUrl =
-    getImageUrl(article.cover?.formats?.medium?.url) ||
-    getImageUrl(article.cover?.formats?.small?.url) ||
-    getImageUrl(article.cover?.url) ||
+    getImageUrl(coverData?.formats?.medium?.url) ||
+    getImageUrl(coverData?.formats?.small?.url) ||
+    getImageUrl(coverData?.url) ||
     null;
 
   /* -------------------- Article -------------------- */
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-        <Link
-          to="/"
-          className="text-blue-600 font-semibold mb-6 inline-block"
-        >
-          ← Back to Articles
-        </Link>
+      <Link
+        to="/"
+        className="text-blue-600 font-semibold mb-6 inline-block"
+      >
+        ← Back to Articles
+      </Link>
 
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={article.title}
-            loading="lazy"
-            className="w-full h-96 object-cover rounded-xl mb-8"
-          />
-        ) : (
-          <div className="w-full h-96 bg-gray-200 rounded-xl mb-8 flex items-center justify-center">
-            <img src="/placeholder.svg" alt="Placeholder" className="w-24 h-24 opacity-50" />
-          </div>
-        )}
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={article.attributes.Title}
+          loading="lazy"
+          className="w-full h-96 object-cover rounded-xl mb-8"
+        />
+      ) : (
+        <div className="w-full h-96 bg-gray-200 rounded-xl mb-8 flex items-center justify-center">
+          <span className="text-gray-400 text-lg">No image available</span>
+        </div>
+      )}
 
-        <p className="text-sm text-gray-400 mb-2">
-          {new Date(article.publishedAt).toLocaleDateString()}
+      <p className="text-sm text-gray-400 mb-2">
+        {new Date(article.attributes.publishedAt).toLocaleDateString()}
+      </p>
+
+      <h1 className="text-4xl font-bold mb-6 text-gray-900">
+        {article.attributes.Title}
+      </h1>
+
+      <div className="prose prose-lg max-w-none">
+        <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap">
+          {article.attributes.content || article.attributes.description}
         </p>
-
-        <h1 className="text-4xl font-bold mb-6 text-gray-900">
-          {article.title}
-        </h1>
-
-        <p className="text-lg text-gray-700 leading-relaxed">
-          {article.description}
-        </p>
+      </div>
     </div>
   );
 };
