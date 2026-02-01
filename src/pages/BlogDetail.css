@@ -1,0 +1,41 @@
+.detail-container {
+  max-width: 56rem; /* 4xl */
+  margin: 0 auto;
+  padding: 2.5rem 1rem;
+}
+
+.detail-loading {
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.detail-not-found {
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--destructive);
+  font-weight: 600;
+}
+
+.detail-image {
+  width: 100%;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.detail-date {
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+}
+
+.detail-description {
+  font-size: 1.125rem;
+  color: #374151; /* gray-700 */
+  line-height: 1.6;
+}

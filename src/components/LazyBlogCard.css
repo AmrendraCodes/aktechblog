@@ -1,0 +1,29 @@
+.skeleton-card-fallback {
+  border-radius: 0.75rem;
+  background-color: white;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  animation: pulse 2s infinite;
+}
+
+.skeleton-image {
+  height: 12rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.skeleton-text-lg {
+  height: 1rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  width: 75%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-text-sm {
+  height: 0.75rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  width: 50%;
+}

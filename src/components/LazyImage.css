@@ -1,0 +1,32 @@
+.lazy-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.lazy-image-placeholder {
+  position: absolute;
+  inset: 0;
+  background-color: var(--muted);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.lazy-image-img {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lazy-image-img.is-loaded {
+  opacity: 1;
+}
+
+.lazy-image-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.error-text {
+  font-size: 0.875rem;
+}

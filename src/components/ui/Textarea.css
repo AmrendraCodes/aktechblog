@@ -1,0 +1,28 @@
+.textarea-base {
+  display: flex;
+  min-height: 5rem; /* 80px */
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--input);
+  background-color: transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  transition: border-color 0.2s;
+}
+
+.textarea-base::placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+.textarea-base:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}
+
+.textarea-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,13 @@
+.label-base {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--foreground);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.label-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
