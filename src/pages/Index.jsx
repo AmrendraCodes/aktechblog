@@ -11,6 +11,8 @@ import "./Index.css";
 const Index = () => {
     const { articles, isLoading, error } = useArticles(1, 6);
 
+
+
     const items = articles || [];
     const featuredPosts = items.slice(0, 2);
     const recentPosts = items.slice(0, 6);

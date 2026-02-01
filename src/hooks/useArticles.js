@@ -4,35 +4,60 @@ import { useEffect, useState } from "react";
 import { strapiService } from "../services/strapi";
 
 // 📰 Get all articles
-export const useArticles = () => {
+export const useArticles = (page = 1, limit = 10) => {
   const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    strapiService
-      .getArticles()
-      .then((res) => setArticles(res.data || []))
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
+    const fetchArticles = async () => {
+      console.log("USEFFECT START");
+      console.log("isLoading =", isLoading);
 
-  return { articles, loading };
+      try {
+        const res = await strapiService.getArticles(page, limit);
+        console.log("API Success");
+        console.log("data from API", res.data);
+        setArticles(res.data?.data || []);
+        setError(null);
+      } catch (err) {
+        console.error("API Error:", err);
+        setError(err);
+      } finally {
+        console.log("API End");
+        setIsLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, [page, limit]);
+  return { articles, isLoading, error };
 };
 
 // 📄 Get single article by slug
 export const useArticleBySlug = (slug) => {
   const [article, setArticle] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!slug) return;
+    const fetchArticle = async () => {
+      if (!slug) return;
 
-    strapiService
-      .getArticleBySlug(slug)
-      .then((res) => setArticle(res.data?.[0] || null))
-      .catch(console.error)
-      .finally(() => setLoading(false));
+      try {
+        const res = await strapiService.getArticleBySlug(slug);
+        setArticle(res.data?.data?.[0] || null);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching article:", err);
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchArticle();
   }, [slug]);
 
-  return { article, loading };
+  return { article, isLoading, error };
 };
